@@ -240,7 +240,7 @@ class ApiProblem implements \ArrayAccess
         return $this;
     }
 
-    public function asJson($pretty)
+    public function asJson($pretty = false)
     {
         $response = $this->compile();
 
