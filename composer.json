@@ -1,9 +1,24 @@
 {
     "name": "crell/api-problem",
+    "type": "library",
+    "description": "PHP wrapper for the api-problem IETF specification",
+    "license": "MIT",
+    "keywords": ["api-problem", "rest", "http", "json", "xml"],
+    "homepage": "https://github.com/Crell/ApiProblem",
+    "authors": [
+        {
+            "name": "Larry Garfield",
+            "email": "larry@garfieldtech.com",
+            "homepage": "http://www.garfieldtech.com/"
+        }
+    ],
     "autoload": {
         "psr-0": {"Crell\\ApiProblem": "src/"}
     },
     "require": {
         "php": ">=5.3.3"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "3.7.*"
     }
 }
