@@ -1,0 +1,9 @@
+{
+    "name": "crell/api-problem",
+    "autoload": {
+        "psr-0": {"Crell\\ApiProblem": "src/"}
+    },
+    "require": {
+        "php": ">=5.3.3"
+    }
+}
