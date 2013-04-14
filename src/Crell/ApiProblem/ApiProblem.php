@@ -22,6 +22,8 @@ namespace Crell\ApiProblem;
  * to specify arbitrary additional properties.
  *
  * @link http://tools.ietf.org/html/draft-nottingham-http-problem-03
+ *
+ * @autor Larry Garfield
  */
 class ApiProblem implements \ArrayAccess
 {
