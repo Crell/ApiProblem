@@ -287,7 +287,7 @@ class ApiProblem implements \ArrayAccess
     /**
      * {@inheritdoc}
      */
-    public function offsetGet($offset)
+    public function &offsetGet($offset)
     {
         return $this->extensions[$offset];
     }
