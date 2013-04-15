@@ -20,5 +20,4 @@ namespace Crell\ApiProblem;
  */
 class RequiredPropertyNotFoundException extends \UnexpectedValueException
 {
-
 }

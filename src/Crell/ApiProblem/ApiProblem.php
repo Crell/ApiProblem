@@ -435,7 +435,7 @@ class ApiProblem implements \ArrayAccess
      * @param mixed $parent
      *   Used for internal recursion only.
      */
-    protected function arrayToXml(array $data, \SimpleXmlElement $element, $parent=null)
+    protected function arrayToXml(array $data, \SimpleXmlElement $element, $parent = null)
     {
         foreach ($data as $key => $value) {
             if (is_array($value)) {
@@ -454,9 +454,9 @@ class ApiProblem implements \ArrayAccess
                 if (!is_numeric($key)) {
                     if (substr($key, 0, 1) === '@') {
                         $element->addAttribute(substr($key, 1), $value);
-                    } elseif($key === 'value') {
+                    } elseif ($key === 'value') {
                         $element->{0} = $value;
-                    } elseif(is_bool($value)) {
+                    } elseif (is_bool($value)) {
                         $element->addChild($key, intval($value));
                     } else {
                         $element->addChild($key, htmlspecialchars($value, ENT_QUOTES));
@@ -499,5 +499,4 @@ class ApiProblem implements \ArrayAccess
     {
         unset($this->extensions[$offset]);
     }
-
 }
