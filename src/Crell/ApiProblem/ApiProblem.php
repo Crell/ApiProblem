@@ -98,12 +98,61 @@ class ApiProblem implements \ArrayAccess
      *   The JSON string to parse.
      * @return \Crell\ApiProblem\ApiProblem
      *   A newly constructed problem object.
-     * @throws \Crell\ApiProblem\RequiredPropertyNotFoundException
      */
     public static function fromJson($json)
     {
         $parsed = json_decode($json, true);
 
+        return static::decompile($parsed);
+    }
+
+    /**
+     * Converts a SimpleXMLElement to a nested array.
+     *
+     * @param \SimpleXMLElement $element
+     *   The XML
+     * @return array
+     *   A nested array corresponding to the XML element provided.
+     */
+    protected static function xmlToArray(\SimpleXMLElement $element)
+    {
+        $data = (array)$element;
+        foreach ($data as $key => $value) {
+            if ($value instanceof \SimpleXMLElement) {
+                $data[$key] = static::xmlToArray($value);
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * Parses an XML string into a Problem object.
+     *
+     * @param string $string
+     *   The XML string to parse.
+     * @return \Crell\ApiProblem\ApiProblem
+     *   A newly constructed problem object.
+     */
+    public static function fromXml($string)
+    {
+        $xml = new \SimpleXMLElement($string);
+
+        $data = static::xmlToArray($xml);
+
+        return static::decompile($data);
+    }
+
+    /**
+     * Decompiles an array into an ApiProblem object.
+     *
+     * @param array $parsed
+     * @return \Crell\ApiProblem\ApiProblem
+     *   A new ApiProblem object.
+     * @throws \Crel\ApiProblem\RequiredPropertyNotFoundException
+     */
+    protected static function decompile(array $parsed)
+    {
         if (empty($parsed['title'])) {
             throw new RequiredPropertyNotFoundException('The provided problem string is invalid. The "title" property is required.');
         }
@@ -136,12 +185,6 @@ class ApiProblem implements \ArrayAccess
 
         return $problem;
     }
-
-    public static function fromXml($xml)
-    {
-        throw new \Exception('Not yet implemented');
-    }
-
 
     /**
      *

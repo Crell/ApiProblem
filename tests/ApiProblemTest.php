@@ -157,5 +157,33 @@ class ApiProblemTest extends \PHPUnit_Framework_TestCase
         ApiProblem::fromJson($json);
     }
 
+    public function testParseXml()
+    {
+        $problem = new ApiProblem('Title', 'URI');
+        $problem->setHttpStatus(403);
+        $problem['sir'] = 'Gir';
+        $problem['irken']['invader'] = 'Zim';
+
+        $result = ApiProblem::fromXml($problem->asXml());
+
+        $this->assertEquals('Title', $result->getTitle());
+        $this->assertEquals(403, $result->getHttpStatus());
+        $this->assertEquals('Gir', $result['sir']);
+        $this->assertEquals('Zim', $result['irken']['invader']);
+    }
+
+    /**
+     * @expectedException \Crell\ApiProblem\RequiredPropertyNotFoundException
+     */
+    public function testParseXmlWithErrors()
+    {
+        $xml = <<<XML
+<problem>
+    <problemType>URI</problemType>
+</problem>
+XML;
+        ApiProblem::fromXml($xml);
+    }
+
 }
 
