@@ -35,6 +35,10 @@ $json_string = $problem->asJson();
 
 ```
 
+Or, even better, you can subclass ApiProblem for a specific problemType (since
+the type and title are supposed to go together and be relatively fixed), then
+just populate your own error-specific data.  Just like extending an exception!
+
 ## Receiving responses
 
 Are you sending messages to an API that is responding with API-Problem errors?
