@@ -130,5 +130,32 @@ class ApiProblemTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    public function testParseJson()
+    {
+        $problem = new ApiProblem('Title', 'URI');
+        $problem->setHttpStatus(403);
+        $problem['sir'] = 'Gir';
+        $problem['irken']['invader'] = 'Zim';
+
+        $result = ApiProblem::fromJson($problem->asJson());
+
+        $this->assertEquals('Title', $result->getTitle());
+        $this->assertEquals(403, $result->getHttpStatus());
+        $this->assertEquals('Gir', $result['sir']);
+        $this->assertEquals('Zim', $result['irken']['invader']);
+    }
+
+    /**
+     * @expectedException \Crell\ApiProblem\RequiredPropertyNotFoundException
+     */
+    public function testParseJsonWithErrors()
+    {
+        $json = json_encode(array(
+            'problemType' => 'URI',
+        ));
+
+        ApiProblem::fromJson($json);
+    }
+
 }
 

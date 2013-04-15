@@ -92,6 +92,58 @@ class ApiProblem implements \ArrayAccess
     protected $extensions = array();
 
     /**
+     * Parses a JSON string into a Problem object.
+     *
+     * @param string $json
+     *   The JSON string to parse.
+     * @return \Crell\ApiProblem\ApiProblem
+     *   A newly constructed problem object.
+     * @throws \Crell\ApiProblem\RequiredPropertyNotFoundException
+     */
+    public static function fromJson($json)
+    {
+        $parsed = json_decode($json, true);
+
+        if (empty($parsed['title'])) {
+            throw new RequiredPropertyNotFoundException('The provided problem string is invalid. The "title" property is required.');
+        }
+        if (empty($parsed['problemType'])) {
+            throw new RequiredPropertyNotFoundException('The provided problem string is invalid. The "problemType" property is required.');
+        }
+
+        $problem = new static($parsed['title'], $parsed['problemType']);
+
+        if (!empty($parsed['httpStatus'])) {
+            $problem->setHttpStatus($parsed['httpStatus']);
+            unset($parsed['httpStatus']);
+        }
+        if (!empty($parsed['detail'])) {
+            $problem->setDetail($parsed['detail']);
+            unset($parsed['detail']);
+        }
+        if (!empty($parsed['problemInstance'])) {
+            $problem->setProblemInstance($parsed['problemInstance']);
+            unset($parsed['problemInstance']);
+        }
+
+        // Remove the defined keys. That means whatever is left must be a custom
+        // extension property.
+        unset($parsed['title'], $parsed['problemType'], $parsed['httpStatus'], $parsed['detail'], $parsed['problemInstance']);
+
+        foreach ($parsed as $key => $value) {
+            $problem[$key] = $value;
+        }
+
+        return $problem;
+    }
+
+    public static function fromXml($xml)
+    {
+        throw new \Exception('Not yet implemented');
+    }
+
+
+    /**
      *
      * @param type $title
      *   A short, human-readable summary of the problem type.  It SHOULD NOT
