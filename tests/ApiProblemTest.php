@@ -88,6 +88,21 @@ class ApiProblemTest extends \PHPUnit_Framework_TestCase
         $json = $problem->asJson();
     }
 
+    public function testSimpleXmlCompile()
+    {
+        $problem = new ApiProblem('Title', 'URI');
+
+        $xml = $problem->asXml();
+        $result = simplexml_load_string($xml);
+
+        $this->assertEquals('problem', $result->getName());
+        $dom = dom_import_simplexml($result);
+
+        $titles = $dom->getElementsByTagName('title');
+
+        $this->assertEquals(1, $titles->length);
+        $this->assertEquals('Title', $titles->item(0)->textContent);
+    }
 
 }
 

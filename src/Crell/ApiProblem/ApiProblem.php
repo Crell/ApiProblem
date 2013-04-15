@@ -261,10 +261,34 @@ class ApiProblem implements \ArrayAccess
         return json_encode($response, $options);
     }
 
-    public function asXml()
+    /**
+     * Renders this problem as XML.
+     *
+     * @param boolean $pretty
+     *   Whether or not to pretty-print the XML string for easier debugging.
+     * @return string
+     *   An XML string representing this problem.
+     */
+    public function asXml($pretty = false)
     {
-        throw new \Exception("Not yet implemented.");
+        $doc = new \SimpleXMLElement('<problem></problem>');
 
+        foreach ($this->compile() as $key => $value) {
+            if (is_array($value)) {
+
+            }
+            else {
+                $doc->addChild($key, $value);
+            }
+
+        }
+
+        $dom = dom_import_simplexml($doc);
+        if ($pretty) {
+            $dom->ownerDocument->preserveWhiteSpace = false;
+            $dom->ownerDocument->formatOutput = true;
+        }
+        return $dom->ownerDocument->saveXML();
     }
 
     /**
