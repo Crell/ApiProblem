@@ -47,6 +47,9 @@ class ApiProblemTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Title', $result['title']);
         $this->assertArrayHasKey('problemType', $result);
         $this->assertEquals('URI', $result['problemType']);
+
+        // Ensure that empty properties are not included.
+        $this->assertArrayNotHasKey('detail', $result);
     }
 
     public function testExtraPropertyJsonCompile()

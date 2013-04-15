@@ -290,9 +290,11 @@ class ApiProblem implements \ArrayAccess
         $response['problemType'] = $this->problemType;
 
         // These properties are optional.
-        $response['httpStatus'] = $this->httpStatus;
-        $response['detail'] = $this->detail;
-        $response['problemInstance'] = $this->problemInstance;
+        foreach (array('httpStatus', 'detail', 'problemInstance') as $key) {
+            if (!empty($this->$key)) {
+                $response[$key] = $this->$key;
+            }
+        }
 
         return $response;
     }
