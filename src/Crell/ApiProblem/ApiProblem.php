@@ -273,15 +273,7 @@ class ApiProblem implements \ArrayAccess
     {
         $doc = new \SimpleXMLElement('<problem></problem>');
 
-        foreach ($this->compile() as $key => $value) {
-            if (is_array($value)) {
-
-            }
-            else {
-                $doc->addChild($key, $value);
-            }
-
-        }
+        $this->arrayToXml($this->compile(), $doc);
 
         $dom = dom_import_simplexml($doc);
         if ($pretty) {
@@ -323,6 +315,52 @@ class ApiProblem implements \ArrayAccess
         return $response;
     }
 
+    /**
+     * Adds a nested array to a SimpleXML element.
+     *
+     * This method was shamelessly coped from the Nocarrier\Hal library:
+     *
+     * @link https://github.com/blongden/hal
+     *
+     * @param array $data
+     *   The data to add to the element.
+     * @param \SimpleXmlElement $element
+     *   The XML object to which to add data.
+     * @param mixed $parent
+     *   Used for internal recursion only.
+     */
+    protected function arrayToXml(array $data, \SimpleXmlElement $element, $parent=null)
+    {
+        foreach ($data as $key => $value) {
+            if (is_array($value)) {
+                if (!is_numeric($key)) {
+                    if (count($value) > 0 && isset($value[0])) {
+                        $this->arrayToXml($value, $element, $key);
+                    } else {
+                        $subnode = $element->addChild($key);
+                        $this->arrayToXml($value, $subnode, $key);
+                    }
+                } else {
+                    $subnode = $element->addChild($parent);
+                    $this->arrayToXml($value, $subnode, $parent);
+                }
+            } else {
+                if (!is_numeric($key)) {
+                    if (substr($key, 0, 1) === '@') {
+                        $element->addAttribute(substr($key, 1), $value);
+                    } elseif($key === 'value') {
+                        $element->{0} = $value;
+                    } elseif(is_bool($value)) {
+                        $element->addChild($key, intval($value));
+                    } else {
+                        $element->addChild($key, htmlspecialchars($value, ENT_QUOTES));
+                    }
+                } else {
+                    $element->addChild($parent, htmlspecialchars($value, ENT_QUOTES));
+                }
+            }
+        }
+    }
 
     /**
      * {@inheritdoc}

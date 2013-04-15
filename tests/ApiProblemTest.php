@@ -99,9 +99,35 @@ class ApiProblemTest extends \PHPUnit_Framework_TestCase
         $dom = dom_import_simplexml($result);
 
         $titles = $dom->getElementsByTagName('title');
-
         $this->assertEquals(1, $titles->length);
         $this->assertEquals('Title', $titles->item(0)->textContent);
+    }
+
+    public function testExtraPropertyXmlCompile()
+    {
+        $problem = new ApiProblem('Title', 'URI');
+        $problem['sir'] = 'Gir';
+        $problem['irken']['invader'] = 'Zim';
+
+        $xml = $problem->asXml(true);
+        $result = simplexml_load_string($xml);
+
+        $this->assertEquals('problem', $result->getName());
+        $dom = dom_import_simplexml($result);
+
+        $titles = $dom->getElementsByTagName('title');
+        $this->assertEquals(1, $titles->length);
+        $this->assertEquals('Title', $titles->item(0)->textContent);
+
+        $sir = $dom->getElementsByTagName('sir');
+        $this->assertEquals(1, $sir->length);
+        $this->assertEquals('Gir', $sir->item(0)->textContent);
+
+        $invader = $result->xpath('/problem/irken/invader');
+        $this->assertCount(1, $invader);
+        while(list( , $node) = each($invader)) {
+            $this->assertEquals('Zim', $node);
+        }
     }
 
 }
