@@ -240,6 +240,15 @@ class ApiProblem implements \ArrayAccess
         return $this;
     }
 
+    /**
+     * Renders this problem as JSON.
+     *
+     * @param boolean $pretty
+     *   Whether or not to pretty-print the JSON string for easier debugging.
+     *   Note that pretty-printing is not supported before PHP 5.4.0.
+     * @return string
+     *   A JSON string representing this problem.
+     */
     public function asJson($pretty = false)
     {
         $response = $this->compile();
