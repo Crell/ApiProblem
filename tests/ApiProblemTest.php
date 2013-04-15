@@ -65,6 +65,26 @@ class ApiProblemTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Zim', $result['irken']['invader']);
     }
 
+    /**
+     * @expectedException \Crell\ApiProblem\RequiredPropertyNotFoundException
+     * @expectedExceptionMessage The "title" property is required
+     */
+    public function testNoTitleError()
+    {
+        $problem = new ApiProblem('', 'URI');
+        $json = $problem->asJson();
+    }
+
+    /**
+     * @expectedException \Crell\ApiProblem\RequiredPropertyNotFoundException
+     * @expectedExceptionMessage The "problemType" property is required
+     */
+    public function testNoProblemTypeError()
+    {
+        $problem = new ApiProblem('Title');
+        $json = $problem->asJson();
+    }
+
 
 }
 

@@ -258,12 +258,25 @@ class ApiProblem implements \ArrayAccess
 
     }
 
+    /**
+     * Compiles the object down to an array format, suitable for serializing.
+     *
+     * @throws \Crell\ApiProblem\RequiredPropertyNotFoundException
+     * @return array
+     *   This object, rendered to an array.
+     */
     protected function compile()
     {
         // Start with any extensions, since that's already an array.
         $response = $this->extensions;
 
         // These properties are required.  If they're not set, it's an error.
+        if (empty($this->title)) {
+            throw new RequiredPropertyNotFoundException('The "title" property is required');
+        }
+        if (empty($this->problemType)) {
+            throw new RequiredPropertyNotFoundException('The "problemType" property is required');
+        }
         $response['title'] = $this->title;
         $response['problemType'] = $this->problemType;
 
