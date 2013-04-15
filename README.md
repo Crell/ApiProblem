@@ -1,6 +1,8 @@
 Crell\ApiProblem
 ================
 
+[![Build Status](https://secure.travis-ci.org/Crell/ApiProblem.png)](http://travis-ci.org/crell/ApiProblem)
+
 This library provides a simple and straightforward implementation of the
 [IETF API-Problem specification][1], currently in draft 3.
 
