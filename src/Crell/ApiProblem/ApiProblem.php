@@ -175,15 +175,12 @@ class ApiProblem implements \ArrayAccess
 
         if (!empty($parsed['httpStatus'])) {
             $problem->setHttpStatus($parsed['httpStatus']);
-            unset($parsed['httpStatus']);
         }
         if (!empty($parsed['detail'])) {
             $problem->setDetail($parsed['detail']);
-            unset($parsed['detail']);
         }
         if (!empty($parsed['problemInstance'])) {
             $problem->setProblemInstance($parsed['problemInstance']);
-            unset($parsed['problemInstance']);
         }
 
         // Remove the defined keys. That means whatever is left must be a custom
