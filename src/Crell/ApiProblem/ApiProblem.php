@@ -160,7 +160,7 @@ class ApiProblem implements \ArrayAccess
      * @param array $parsed
      * @return \Crell\ApiProblem\ApiProblem
      *   A new ApiProblem object.
-     * @throws \Crel\ApiProblem\RequiredPropertyNotFoundException
+     * @throws \Crell\ApiProblem\RequiredPropertyNotFoundException
      */
     protected static function decompile(array $parsed)
     {
