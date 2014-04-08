@@ -344,6 +344,16 @@ class ApiProblem implements \ArrayAccess
     }
 
     /**
+     * Renders this problem as a native PHP array.
+     *
+     * @return array
+     */
+    public function asArray()
+    {
+        return $this->compile();
+    }
+
+    /**
      * Renders this problem as JSON.
      *
      * @param boolean $pretty
