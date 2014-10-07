@@ -4,7 +4,7 @@ Crell\ApiProblem
 [![Build Status](https://secure.travis-ci.org/Crell/ApiProblem.png)](http://travis-ci.org/crell/ApiProblem)
 
 This library provides a simple and straightforward implementation of the
-[IETF API-Problem specification][1], currently in draft 3.
+[IETF API-Problem specification][1], currently in draft 7.
 
 API-Problem is a simple specification for formatting error responses from RESTful
 APIs on the web.  This library provides a simple and convenient way to interact
@@ -20,7 +20,7 @@ $problem = new ApiProblem("You do not have enough credit.", "http://example.com/
 // Defined properties in the API have their own setter methods.
 $problem
   ->setDetail("Your current balance is 30, but that costs 50.")
-  ->setProblemInstance("http://example.net/account/12345/msgs/abc");
+  ->setInstance("http://example.net/account/12345/msgs/abc");
 // But you can also support any arbitrary extended properties!
 $problem['balance'] = 30;
 $problem['accounts'] = array(
@@ -48,16 +48,10 @@ No problem!  You can easily handle that response like so:
 use Crell\ApiProblem\ApiProblem;
 use Crell\ApiProblem\RequiredPropertyNotFoundException;
 
-try {
-  $problem = ApiProblem::fromJson($some_json_string);
-  $title = $problem->getTitle();
-  $problemType = $problem->getProblemType();
-  // Great, now we know what went wrong, so we can figure out what to do about it.
-}
-catch (RequiredPropertyNotFoundException $e) {
-  // Uh oh, we received a badly-formed API-Problem! Log it and go yell at the
-  // developers on the other end.
-}
+$problem = ApiProblem::fromJson($some_json_string);
+$title = $problem->getTitle();
+$type = $problem->getType();
+// Great, now we know what went wrong, so we can figure out what to do about it.
 ```
 
 (It works for fromXml(), too!)
@@ -71,14 +65,12 @@ the latest version of the ApiProblem library into your project.
 ```json
 {
     "require": {
-        "crell/api-problem": "*"
-    },
-    "minimum-stability": "dev"
+        "crell/api-problem": "1.7"
+    }
 }
 ```
 
-You can also specify a specific release tag.  See the [Composer documentation][2]
-for more details.
+See the [Composer documentation][2] for more details.
 
 Alternatively, clone the project and install into your project manually.
 
@@ -93,5 +85,5 @@ statement intact, otherwise have fun."  See LICENSE for more information.
 Pull requests accepted!  The goal is complete conformance with the IETF spec.
 This library will be updated as needed for future drafts.
 
-[1]: http://tools.ietf.org/html/draft-nottingham-http-problem-03
+[1]: http://tools.ietf.org/html/draft-nottingham-http-problem-07
 [2]: http://getcomposer.org/
