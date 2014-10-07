@@ -71,9 +71,8 @@ the latest version of the ApiProblem library into your project.
 ```json
 {
     "require": {
-        "crell/api-problem": "*"
-    },
-    "minimum-stability": "dev"
+        "crell/api-problem": "~1.0@beta"
+    }
 }
 ```
 
