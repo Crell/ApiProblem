@@ -171,5 +171,20 @@ class ApiProblemTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Gir', $result['sir']);
         $this->assertEquals('Zim', $result['irken']['invader']);
     }
+
+    public function testArray()
+    {
+        $problem = new ApiProblem('Title', 'URI');
+        $problem->setStatus(403);
+        $problem['sir'] = 'Gir';
+        $problem['irken']['invader'] = 'Zim';
+
+        $array = $problem->asArray();
+        $this->assertEquals('Gir', $array['sir']);
+        $this->assertEquals(403, $array['status']);
+        $this->assertEquals('Title', $array['title']);
+        $this->assertEquals('URI', $array['type']);
+        $this->assertEquals('Zim', $array['irken']['invader']);
+    }
 }
 

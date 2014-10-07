@@ -395,6 +395,20 @@ class ApiProblem implements \ArrayAccess
     }
 
     /**
+     * Renders this problem as a native PHP array.
+     *
+     * This is mostly useful for debugging, or for placing
+     * this problem response into, say, a Symfony JsonResponse object.
+     *
+     * @return array
+     *   The API problem represented as an array.
+    */
+    public function asArray()
+    {
+        return $this->compile();
+    }
+
+    /**
      * Compiles the object down to an array format, suitable for serializing.
      *
      * @throws \Crell\ApiProblem\RequiredPropertyNotFoundException
