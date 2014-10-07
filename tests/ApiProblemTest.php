@@ -25,7 +25,7 @@ class ApiProblemTest extends \PHPUnit_Framework_TestCase
     {
         $problem = new ApiProblem('Title', 'URI');
         $this->assertEquals("Title", $problem->getTitle());
-        $this->assertEquals("URI", $problem->getProblemType());
+        $this->assertEquals("URI", $problem->getType());
     }
 
     public function testSimpleExtraProperty()
@@ -56,8 +56,8 @@ class ApiProblemTest extends \PHPUnit_Framework_TestCase
 
         $this->assertArrayHasKey('title', $result);
         $this->assertEquals('Title', $result['title']);
-        $this->assertArrayHasKey('problemType', $result);
-        $this->assertEquals('URI', $result['problemType']);
+        $this->assertArrayHasKey('type', $result);
+        $this->assertEquals('URI', $result['type']);
 
         // Ensure that empty properties are not included.
         $this->assertArrayNotHasKey('detail', $result);
@@ -80,23 +80,24 @@ class ApiProblemTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Crell\ApiProblem\RequiredPropertyNotFoundException
-     * @expectedExceptionMessage The "title" property is required
+     * Confirms that the title property is optional.
      */
-    public function testNoTitleError()
+    public function testNoTitleAllowed()
     {
-        $problem = new ApiProblem('', 'URI');
+        // This should result in no error.
+        $problem = new ApiProblem();
         $json = $problem->asJson();
     }
 
     /**
-     * @expectedException \Crell\ApiProblem\RequiredPropertyNotFoundException
-     * @expectedExceptionMessage The "problemType" property is required
+     * Confirms that the type property defaults to "about:blank"
      */
-    public function testNoProblemTypeError()
+    public function testTypeDefault()
     {
         $problem = new ApiProblem('Title');
         $json = $problem->asJson();
+        $result = json_decode($json, true);
+        $this->assertEquals('about:blank', $result['type']);
     }
 
     public function testSimpleXmlCompile()
@@ -144,57 +145,31 @@ class ApiProblemTest extends \PHPUnit_Framework_TestCase
     public function testParseJson()
     {
         $problem = new ApiProblem('Title', 'URI');
-        $problem->setHttpStatus(403);
+        $problem->setStatus(403);
         $problem['sir'] = 'Gir';
         $problem['irken']['invader'] = 'Zim';
 
         $result = ApiProblem::fromJson($problem->asJson());
 
         $this->assertEquals('Title', $result->getTitle());
-        $this->assertEquals(403, $result->getHttpStatus());
+        $this->assertEquals(403, $result->getStatus());
         $this->assertEquals('Gir', $result['sir']);
         $this->assertEquals('Zim', $result['irken']['invader']);
-    }
-
-    /**
-     * @expectedException \Crell\ApiProblem\RequiredPropertyNotFoundException
-     */
-    public function testParseJsonWithErrors()
-    {
-        $json = json_encode(array(
-            'problemType' => 'URI',
-        ));
-
-        ApiProblem::fromJson($json);
     }
 
     public function testParseXml()
     {
         $problem = new ApiProblem('Title', 'URI');
-        $problem->setHttpStatus(403);
+        $problem->setStatus(403);
         $problem['sir'] = 'Gir';
         $problem['irken']['invader'] = 'Zim';
 
         $result = ApiProblem::fromXml($problem->asXml());
 
         $this->assertEquals('Title', $result->getTitle());
-        $this->assertEquals(403, $result->getHttpStatus());
+        $this->assertEquals(403, $result->getStatus());
         $this->assertEquals('Gir', $result['sir']);
         $this->assertEquals('Zim', $result['irken']['invader']);
     }
-
-    /**
-     * @expectedException \Crell\ApiProblem\RequiredPropertyNotFoundException
-     */
-    public function testParseXmlWithErrors()
-    {
-        $xml = <<<XML
-<problem>
-    <problemType>URI</problemType>
-</problem>
-XML;
-        ApiProblem::fromXml($xml);
-    }
-
 }
 

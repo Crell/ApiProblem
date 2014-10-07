@@ -32,7 +32,7 @@ namespace Crell\ApiProblem;
  * to get/set those values. For extended values, use the ArrayAccess interface
  * to specify arbitrary additional properties.
  *
- * @link http://tools.ietf.org/html/draft-nottingham-http-problem-03
+ * @link http://tools.ietf.org/html/draft-nottingham-http-problem-07
  *
  * @autor Larry Garfield
  */
@@ -53,11 +53,15 @@ class ApiProblem implements \ArrayAccess
      * An absolute URI [RFC3986] that identifies the problem type.
      *
      * When dereferenced, it SHOULD provide human-readable documentation for the
-     * problem type (e.g., using HTML).
+     * problem type (e.g., using HTML). When this member is not present, its
+     * value is assumed to be "about:blank".
+     *
+     * Consumers MUST use the type string as the primary identifier for the
+     * problem type
      *
      * @var string
      */
-    protected $problemType;
+    protected $type;
 
     /**
      * The HTTP status code set by the origin server for this occurrence of the problem.
@@ -70,7 +74,7 @@ class ApiProblem implements \ArrayAccess
      *
      * @var int
      */
-    protected $httpStatus;
+    protected $status;
 
     /**
      * An human readable explanation specific to this occurrence of the problem.
@@ -93,7 +97,7 @@ class ApiProblem implements \ArrayAccess
      *
      * @var string
      */
-    protected $problemInstance;
+    protected $instance;
 
     /**
      * Any arbitrary extension properties that have been assigned on this object.
@@ -158,34 +162,34 @@ class ApiProblem implements \ArrayAccess
      * Decompiles an array into an ApiProblem object.
      *
      * @param array $parsed
+     *   An array parsed from JSON or XML to turn into an ApiProblem object.
      * @return \Crell\ApiProblem\ApiProblem
      *   A new ApiProblem object.
-     * @throws \Crell\ApiProblem\RequiredPropertyNotFoundException
      */
     protected static function decompile(array $parsed)
     {
-        if (empty($parsed['title'])) {
-            throw new RequiredPropertyNotFoundException('The provided problem string is invalid. The "title" property is required.');
-        }
-        if (empty($parsed['problemType'])) {
-            throw new RequiredPropertyNotFoundException('The provided problem string is invalid. The "problemType" property is required.');
-        }
+        $problem = new static();
 
-        $problem = new static($parsed['title'], $parsed['problemType']);
 
-        if (!empty($parsed['httpStatus'])) {
-            $problem->setHttpStatus($parsed['httpStatus']);
+        if (!empty($parsed['title'])) {
+            $problem->setTitle($parsed['title']);
+        }
+        if (!empty($parsed['type'])) {
+            $problem->setType($parsed['type']);
+        }
+        if (!empty($parsed['status'])) {
+            $problem->setStatus($parsed['status']);
         }
         if (!empty($parsed['detail'])) {
             $problem->setDetail($parsed['detail']);
         }
-        if (!empty($parsed['problemInstance'])) {
-            $problem->setProblemInstance($parsed['problemInstance']);
+        if (!empty($parsed['instance'])) {
+            $problem->setInstance($parsed['instance']);
         }
 
         // Remove the defined keys. That means whatever is left must be a custom
         // extension property.
-        unset($parsed['title'], $parsed['problemType'], $parsed['httpStatus'], $parsed['detail'], $parsed['problemInstance']);
+        unset($parsed['title'], $parsed['type'], $parsed['status'], $parsed['detail'], $parsed['instance']);
 
         foreach ($parsed as $key => $value) {
             $problem[$key] = $value;
@@ -205,12 +209,16 @@ class ApiProblem implements \ArrayAccess
      *   dereferenced, it SHOULD provide human-readable documentation for the
      *   problem type (e.g., using HTML).
      */
-    public function __construct($title = '', $type = '')
+    public function __construct($title = '', $type = 'about:blank')
     {
-        $this->title = $title;
-        $this->problemType = $type;
+        if ($title) {
+            $this->title = $title;
+        }
+        if ($type) {
+            $this->type = $type;
+        }
         $this->detail = '';
-        $this->problemInstance = '';
+        $this->instance = '';
     }
 
     /**
@@ -244,9 +252,9 @@ class ApiProblem implements \ArrayAccess
      * @return string
      *   The problem type URI of this problem.
      */
-    public function getProblemType()
+    public function getType()
     {
-        return $this->problemType;
+        return $this->type;
     }
 
     /**
@@ -257,9 +265,9 @@ class ApiProblem implements \ArrayAccess
      * @return \Crell\ApiProblem\ApiProblem
      *   The invoked object.
      */
-    public function setProblemType($type)
+    public function setType($type)
     {
-        $this->problemType = $type;
+        $this->type = $type;
         return $this;
     }
 
@@ -294,24 +302,24 @@ class ApiProblem implements \ArrayAccess
      * @return string
      *   The problem instance URI of this problem.
      */
-    public function getProblemInstance()
+    public function getInstance()
     {
-        return $this->problemInstance;
+        return $this->instance;
     }
 
     /**
      * Sets the problem instance URI of this problem.
      *
-     * @param string $problemInstance
+     * @param string $instance
      *   An absolute URI that uniquely identifies this problem. It MAY link to
      *   further information about the error, but that is not required.
      *
      * @return \Crell\ApiProblem\ApiProblem
      *   The invoked object.
      */
-    public function setProblemInstance($problemInstance)
+    public function setInstance($instance)
     {
-        $this->problemInstance = $problemInstance;
+        $this->instance = $instance;
         return $this;
     }
 
@@ -321,9 +329,9 @@ class ApiProblem implements \ArrayAccess
      * @return int|null
      *   The current HTTP status code. If not set, it will return NULL.
      */
-    public function getHttpStatus()
+    public function getStatus()
     {
-        return $this->httpStatus;
+        return $this->status;
     }
 
     /**
@@ -337,9 +345,9 @@ class ApiProblem implements \ArrayAccess
      * @return \Crell\ApiProblem\ApiProblem
      *   The invoked object.
      */
-    public function setHttpStatus($status)
+    public function setStatus($status)
     {
-        $this->httpStatus = $status;
+        $this->status = $status;
         return $this;
     }
 
@@ -398,18 +406,8 @@ class ApiProblem implements \ArrayAccess
         // Start with any extensions, since that's already an array.
         $response = $this->extensions;
 
-        // These properties are required.  If they're not set, it's an error.
-        if (empty($this->title)) {
-            throw new RequiredPropertyNotFoundException('The "title" property is required');
-        }
-        if (empty($this->problemType)) {
-            throw new RequiredPropertyNotFoundException('The "problemType" property is required');
-        }
-        $response['title'] = $this->title;
-        $response['problemType'] = $this->problemType;
-
         // These properties are optional.
-        foreach (array('httpStatus', 'detail', 'problemInstance') as $key) {
+        foreach (array('title', 'type', 'status', 'detail', 'instance') as $key) {
             if (!empty($this->$key)) {
                 $response[$key] = $this->$key;
             }
