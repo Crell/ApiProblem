@@ -186,5 +186,32 @@ class ApiProblemTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('URI', $array['type']);
         $this->assertEquals('Zim', $array['irken']['invader']);
     }
+
+    public function testAsException()
+    {
+        $problem = new ApiProblem('Title', 'URI');
+        $problem->setStatus(500);
+
+        $exception = $problem->asException();
+
+        $this->assertEquals('Title', $exception->getMessage());
+        $this->assertEquals(500, $exception->getCode());
+        $this->assertEquals('Title', $exception->getApiProblem()->getTitle());
+        $this->assertEquals(500, $exception->getApiProblem()->getStatus());
+        $this->assertEquals('URI', $exception->getApiProblem()->getType());
+    }
+
+    /**
+     * @expectedException        Crell\ApiProblem\ApiProblemException
+     * @expectedExceptionMessage Title
+     * @expectedExceptionCode    500
+     */
+    public function testThrowingAsException()
+    {
+        $problem = new ApiProblem('Title', 'URI');
+        $problem->setStatus(500);
+
+        throw $problem->asException();
+    }
 }
 

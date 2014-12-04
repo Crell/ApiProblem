@@ -508,4 +508,14 @@ class ApiProblem implements \ArrayAccess
     {
         unset($this->extensions[$offset]);
     }
+
+    /**
+     * Render as an Exception
+     *
+     * @return ApiProblemException
+     */
+    public function asException()
+    {
+        return new ApiProblemException($this);
+    }
 }
