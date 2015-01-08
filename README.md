@@ -58,17 +58,9 @@ $type = $problem->getType();
 
 ## Installation
 
-The preferred method of installation is via Packagist as this provides the PSR-0
-autoloader functionality. The following composer.json will download and install
-the latest version of the ApiProblem library into your project.
+The preferred method of installation is via Composer with the following command:
 
-```json
-{
-    "require": {
-        "crell/api-problem": "1.7"
-    }
-}
-```
+    composer require crell/api-problem
 
 See the [Composer documentation][2] for more details.
 
