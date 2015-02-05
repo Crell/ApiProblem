@@ -16,7 +16,8 @@
         "psr-4": {"Crell\\ApiProblem\\": "src/"}
     },
     "require": {
-        "php": ">=5.3.3"
+        "php": ">=5.3.3",
+        "codeclimate/php-test-reporter": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.*"
