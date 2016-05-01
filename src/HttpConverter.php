@@ -5,8 +5,29 @@ namespace Crell\ApiProblem;
 use Psr\Http\Message\ResponseInterface;
 use Zend\Diactoros\Stream;
 
+/**
+ * Utility class to convert a problem object to an HTTP Response, using PSR-7.
+ */
 class HttpConverter
 {
+    /**
+     * Whether or not the response body should be "pretty-printed".
+     *
+     * @var bool
+     */
+    protected $pretty;
+
+    /**
+     * HttpConverter constructor.
+     *
+     * @param bool $pretty
+     *   Whether or not the response body should be pretty-printed.
+     */
+    public function __construct($pretty = false)
+    {
+        $this->pretty = $pretty;
+    }
+
     /**
      * Converts a problem to a JSON HTTP Response object, provided.
      *
@@ -24,7 +45,7 @@ class HttpConverter
         // this for us, and for that matter is there a way to avoid relying on
         // Diactoros?
         $stream = fopen('php://temp', 'w');
-        fwrite($stream, $problem->asJson());
+        fwrite($stream, $problem->asJson($this->pretty));
         rewind($stream);
 
         return $this->toResponse($problem, $response)
@@ -49,7 +70,7 @@ class HttpConverter
         // this for us, and for that matter is there a way to avoid relying on
         // Diactoros?
         $stream = fopen('php://temp', 'w');
-        fwrite($stream, $problem->asXml());
+        fwrite($stream, $problem->asXml($this->pretty));
         rewind($stream);
 
         return $this->toResponse($problem, $response)
