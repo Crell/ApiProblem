@@ -4,11 +4,11 @@ Crell\ApiProblem
 [![Build Status](https://secure.travis-ci.org/Crell/ApiProblem.png)](http://travis-ci.org/crell/ApiProblem)
 
 This library provides a simple and straightforward implementation of the
-[IETF API-Problem specification][1], currently in draft 7.
+[IETF Problem specification][1], RFC 7809.
 
-API-Problem is a simple specification for formatting error responses from RESTful
+RFC 7809 is a simple specification for formatting error responses from RESTful
 APIs on the web.  This library provides a simple and convenient way to interact
-with that specification.  It supports generating and parsing API-Problem messages,
+with that specification.  It supports generating and parsing RFC 7809 messages,
 in both JSON and XML variants.
 
 ## Generating responses
@@ -35,7 +35,7 @@ $json_string = $problem->asJson();
 
 ```
 
-Or, even better, you can subclass ApiProblem for a specific problemType (since
+Or, even better, you can subclass ApiProblem for a specific problem type (since
 the type and title are supposed to go together and be relatively fixed), then
 just populate your own error-specific data.  Just like extending an exception!
 

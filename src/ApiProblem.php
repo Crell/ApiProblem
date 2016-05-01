@@ -16,14 +16,13 @@ namespace Crell\ApiProblem;
 /**
  * An API error of some form.
  *
- * This object generates errors in compliance with the IETF api-problem
- * specification draft.
+ * This object generates errors in compliance with RFC 7807 "API Problem".
  *
  * This object should be configured via the appropriate methods, and then
  * rendered using the asJson() or asXml() methods. The resulting string is
  * safe to then send in response to an HTTP request. When sent, the response
- * should have a mime type of application/api-problem+json or
- * application/api-problem+xml, as appropriate.
+ * should have a mime type of application/problem+json or
+ * application/problem+xml, as appropriate.
  *
  * Subclassing this class to provide defaults for different problem types for
  * your application is encouraged.
@@ -32,7 +31,7 @@ namespace Crell\ApiProblem;
  * to get/set those values. For extended values, use the ArrayAccess interface
  * to specify arbitrary additional properties.
  *
- * @link http://tools.ietf.org/html/draft-nottingham-http-problem-07
+ * @link http://tools.ietf.org/html/rfc7807
  *
  * @autor Larry Garfield
  */
@@ -43,21 +42,27 @@ class ApiProblem implements \ArrayAccess
      *  A short, human-readable summary of the problem type.
      *
      *  It SHOULD NOT change from occurrence to occurrence of the problem,
-     *  except for purposes of localisation.
+     *  except for purposes of localization.
      *
      * @var string
      */
     protected $title;
 
     /**
-     * An absolute URI [RFC3986] that identifies the problem type.
+     * A URI reference (RFC3986) that identifies the problem type.
      *
-     * When dereferenced, it SHOULD provide human-readable documentation for the
-     * problem type (e.g., using HTML). When this member is not present, its
-     * value is assumed to be "about:blank".
+     * This specification encourages that, when dereferenced, it provide
+     * human-readable documentation for the problem type (e.g., using HTML
+     * [W3C.REC-html5-20141028]).  When this member is not present, its value
+     * is assumed to be "about:blank".
      *
      * Consumers MUST use the type string as the primary identifier for the
-     * problem type
+     * problem type.
+     *
+     * This value may be an absolute or or relative URI. If relative, it MUST be
+     * resolved relative to the document's base URI, as per RFC3986, Section 5.
+     *
+     * @link http://tools.ietf.org/html/rfc3986
      *
      * @var string
      */
@@ -66,7 +71,7 @@ class ApiProblem implements \ArrayAccess
     /**
      * The HTTP status code set by the origin server for this occurrence of the problem.
      *
-     * The httpStatus member, if present, is only advisory; it conveys the HTTP
+     * The status member, if present, is only advisory; it conveys the HTTP
      * status code used for the convenience of the consumer. Generators MUST
      * use the same status code in the actual HTTP response, to assure that
      * generic HTTP software that does not understand this format still behaves
@@ -79,21 +84,25 @@ class ApiProblem implements \ArrayAccess
     /**
      * An human readable explanation specific to this occurrence of the problem.
      *
-     * The detail member, if present, SHOULD focus on helping the client correct
-     * the problem, rather than giving debugging information.
+     * The "detail" member, if present, ought to focus on helping the client
+     * correct the problem, rather than giving debugging information.
      *
-     * Consumers SHOULD NOT be parse the detail member for information;
-     * extensions are more suitable and less error-prone ways to obtain such
-     * information.
+     * Consumers SHOULD NOT parse the "detail" member for information; extensions
+     * are more suitable and less error-prone ways to obtain such information.
      *
      * @var string
      */
     protected $detail;
 
     /**
-     * An absolute URI that identifies the specific occurrence of the problem.
+     * A URI reference that identifies the specific occurrence of the problem.
      *
      * It may or may not yield further information if dereferenced.
+     *
+     * This value may be an absolute or or relative URI. If relative, it MUST be
+     * resolved relative to the document's base URI, as per RFC3986, Section 5.
+     *
+     * @link http://tools.ietf.org/html/rfc3986
      *
      * @var string
      */
@@ -111,7 +120,7 @@ class ApiProblem implements \ArrayAccess
      *
      * @param string $json
      *   The JSON string to parse.
-     * @return \Crell\ApiProblem\ApiProblem
+     * @return ApiProblem
      *   A newly constructed problem object.
      */
     public static function fromJson($json)
@@ -146,7 +155,7 @@ class ApiProblem implements \ArrayAccess
      *
      * @param string $string
      *   The XML string to parse.
-     * @return \Crell\ApiProblem\ApiProblem
+     * @return ApiProblem
      *   A newly constructed problem object.
      */
     public static function fromXml($string)
@@ -163,7 +172,7 @@ class ApiProblem implements \ArrayAccess
      *
      * @param array $parsed
      *   An array parsed from JSON or XML to turn into an ApiProblem object.
-     * @return \Crell\ApiProblem\ApiProblem
+     * @return ApiProblem
      *   A new ApiProblem object.
      */
     protected static function decompile(array $parsed)
@@ -199,13 +208,14 @@ class ApiProblem implements \ArrayAccess
     }
 
     /**
+     * Constructs a new ApiProblem.
      *
      * @param string $title
      *   A short, human-readable summary of the problem type.  It SHOULD NOT
      *   change from occurrence to occurrence of the problem, except for
-     *   purposes of localisation.
+     *   purposes of localization.
      * @param string $type
-     *   An absolute URI [RFC3986] that identifies the problem type.  When
+     *   An absolute URI (RFC3986) that identifies the problem type.  When
      *   dereferenced, it SHOULD provide human-readable documentation for the
      *   problem type (e.g., using HTML).
      */
@@ -217,8 +227,6 @@ class ApiProblem implements \ArrayAccess
         if ($type) {
             $this->type = $type;
         }
-        $this->detail = '';
-        $this->instance = '';
     }
 
     /**
@@ -237,7 +245,7 @@ class ApiProblem implements \ArrayAccess
      *
      * @param string $title
      *   The title to set.
-     *  @return \Crell\ApiProblem\ApiProblem
+     *  @return ApiProblem
      *   The invoked object.
      */
     public function setTitle($title)
@@ -262,7 +270,7 @@ class ApiProblem implements \ArrayAccess
      *
      * @param string $type
      *   The resolvable problem type URI of this problem.
-     * @return \Crell\ApiProblem\ApiProblem
+     * @return ApiProblem
      *   The invoked object.
      */
     public function setType($type)
@@ -287,7 +295,7 @@ class ApiProblem implements \ArrayAccess
      *
      * @param string $detail
      *   The human-readable detail string about this problem.
-     * @return \Crell\ApiProblem\ApiProblem
+     * @return ApiProblem
      *   The invoked object.
      */
     public function setDetail($detail)
@@ -314,7 +322,7 @@ class ApiProblem implements \ArrayAccess
      *   An absolute URI that uniquely identifies this problem. It MAY link to
      *   further information about the error, but that is not required.
      *
-     * @return \Crell\ApiProblem\ApiProblem
+     * @return ApiProblem
      *   The invoked object.
      */
     public function setInstance($instance)
@@ -326,12 +334,12 @@ class ApiProblem implements \ArrayAccess
     /**
      * Returns the current HTTP status code.
      *
-     * @return int|null
-     *   The current HTTP status code. If not set, it will return NULL.
+     * @return int
+     *   The current HTTP status code. If not set, it will return 0.
      */
     public function getStatus()
     {
-        return $this->status;
+        return $this->status ?: 0;
     }
 
     /**
@@ -342,7 +350,7 @@ class ApiProblem implements \ArrayAccess
      *
      * @param int $status
      *   A valid HTTP status code.
-     * @return \Crell\ApiProblem\ApiProblem
+     * @return ApiProblem
      *   The invoked object.
      */
     public function setStatus($status)
