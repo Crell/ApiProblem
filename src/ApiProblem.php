@@ -364,7 +364,6 @@ class ApiProblem implements \ArrayAccess
      *
      * @param boolean $pretty
      *   Whether or not to pretty-print the JSON string for easier debugging.
-     *   Note that pretty-printing is not supported before PHP 5.4.0.
      * @return string
      *   A JSON string representing this problem.
      */
@@ -373,7 +372,7 @@ class ApiProblem implements \ArrayAccess
         $response = $this->compile();
 
         $options = 0;
-        if (version_compare(PHP_VERSION, '5.4.0') >= 0 && $pretty) {
+        if ($pretty) {
             $options = JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT;
         }
 

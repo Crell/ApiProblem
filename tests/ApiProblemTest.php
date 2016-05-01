@@ -38,6 +38,7 @@ class ApiProblemTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Gir', $problem['sir']);
 
         unset($problem['sir']);
+        $this->assertFalse(isset($problem['sir']));
         $this->assertNull($problem['sir']);
     }
 
@@ -46,6 +47,7 @@ class ApiProblemTest extends \PHPUnit_Framework_TestCase
         $problem = new ApiProblem('Title', 'URI');
 
         $problem['irken']['invader'] = 'Zim';
+        $this->assertTrue(isset($problem['irken']['invader']));
         $this->assertEquals('Zim', $problem['irken']['invader']);
     }
 
@@ -148,12 +150,16 @@ class ApiProblemTest extends \PHPUnit_Framework_TestCase
     {
         $problem = new ApiProblem('Title', 'URI');
         $problem->setStatus(403);
+        $problem->setInstance('Instance');
+        $problem->setDetail('Detail');
         $problem['sir'] = 'Gir';
         $problem['irken']['invader'] = 'Zim';
 
         $result = ApiProblem::fromJson($problem->asJson());
 
         $this->assertEquals('Title', $result->getTitle());
+        $this->assertEquals('Instance', $result->getInstance());
+        $this->assertEquals('Detail', $result->getDetail());
         $this->assertEquals(403, $result->getStatus());
         $this->assertEquals('Gir', $result['sir']);
         $this->assertEquals('Zim', $result['irken']['invader']);
@@ -187,6 +193,16 @@ class ApiProblemTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Title', $array['title']);
         $this->assertEquals('URI', $array['type']);
         $this->assertEquals('Zim', $array['irken']['invader']);
+    }
+
+    public function testPrettyPrintJson() {
+        $problem = new ApiProblem('Title', 'URI');
+        $problem->setStatus(403);
+        $problem['sir'] = 'Gir';
+        $problem['irken']['invader'] = 'Zim';
+
+        $json = $problem->asJson(true);
+        $this->assertTrue(strpos($json, '  ') !== FALSE);
     }
 }
 
