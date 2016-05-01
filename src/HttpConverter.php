@@ -41,16 +41,14 @@ class HttpConverter
      */
     public function toJsonResponse(ApiProblem $problem, ResponseInterface $response)
     {
-        // @todo Figure out why Diactoros' stream implementation isn't handling
-        // this for us, and for that matter is there a way to avoid relying on
-        // Diactoros?
-        $stream = fopen('php://temp', 'w');
-        fwrite($stream, $problem->asJson($this->pretty));
-        rewind($stream);
+        $body = $response->getBody();
+        $body->rewind();
+        $body->write($problem->asJson($this->pretty));
+
 
         return $this->toResponse($problem, $response)
             ->withHeader('Content-Type', 'application/problem+json')
-            ->withBody(new Stream($stream));
+            ->withBody($body);
     }
 
     /**
