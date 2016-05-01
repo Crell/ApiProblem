@@ -15,16 +15,25 @@
     "autoload": {
         "psr-4": {"Crell\\ApiProblem\\": "src/"}
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Crell\\ApiProblem\\Test\\": "tests"
+        }
+    },
     "require": {
         "php": ">=5.3.3"
     },
     "require-dev": {
-        "phpunit/phpunit": "3.7.*",
+        "phpunit/phpunit": "4.*",
         "codeclimate/php-test-reporter": "dev-master"
     },
     "extra": {
         "branch-alias": {
             "dev-master": "1.7.x-dev"
         }
+    },
+    "scripts": {
+        "test": "php vendor/bin/phpunit",
+        "test-coverage": "php vendor/bin/phpunit --coverage-html coverage"
     }
 }

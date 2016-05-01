@@ -11,7 +11,9 @@
  * @package Crell\ApiProblem
  */
 
-namespace Crell\ApiProblem;
+namespace Crell\ApiProblem\Test;
+
+use Crell\ApiProblem\ApiProblem;
 
 /**
  * Tests for the ApiProblem object.

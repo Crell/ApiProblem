@@ -1,2 +1,4 @@
 /nbproject
 vendor
+composer.lock
+coverage

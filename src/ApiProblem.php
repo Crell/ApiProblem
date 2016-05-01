@@ -200,11 +200,11 @@ class ApiProblem implements \ArrayAccess
 
     /**
      *
-     * @param type $title
+     * @param string $title
      *   A short, human-readable summary of the problem type.  It SHOULD NOT
      *   change from occurrence to occurrence of the problem, except for
      *   purposes of localisation.
-     * @param type $type
+     * @param string $type
      *   An absolute URI [RFC3986] that identifies the problem type.  When
      *   dereferenced, it SHOULD provide human-readable documentation for the
      *   problem type (e.g., using HTML).
