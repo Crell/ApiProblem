@@ -46,7 +46,6 @@ No problem!  You can easily handle that response like so:
 
 ```php
 use Crell\ApiProblem\ApiProblem;
-use Crell\ApiProblem\RequiredPropertyNotFoundException;
 
 $problem = ApiProblem::fromJson($some_json_string);
 $title = $problem->getTitle();

@@ -411,7 +411,6 @@ class ApiProblem implements \ArrayAccess
     /**
      * Compiles the object down to an array format, suitable for serializing.
      *
-     * @throws \Crell\ApiProblem\RequiredPropertyNotFoundException
      * @return array
      *   This object, rendered to an array.
      */
