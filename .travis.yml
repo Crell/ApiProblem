@@ -6,3 +6,11 @@ php:
   - "5.4"
 before_script:
   - composer install --dev
+
+## Run on container environment
+sudo: false
+
+## Cache composer bits
+cache:
+  directories:
+    - $HOME/.composer/cache
