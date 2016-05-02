@@ -128,6 +128,9 @@ class ApiProblem implements \ArrayAccess
      */
     public static function fromJson($json)
     {
+        if (empty($json)) {
+            throw (new JsonParseException('An empty string is not a valid JSON value', JSON_ERROR_SYNTAX))->setJson($json);
+        }
         $parsed = json_decode($json, true);
 
         switch (json_last_error()) {
