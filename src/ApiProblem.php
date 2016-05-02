@@ -122,12 +122,37 @@ class ApiProblem implements \ArrayAccess
      *   The JSON string to parse.
      * @return ApiProblem
      *   A newly constructed problem object.
+     *
+     * @throws JsonParseException
+     *   Invalid JSON strings will result in a thrown exception.
      */
     public static function fromJson($json)
     {
         $parsed = json_decode($json, true);
 
-        return static::decompile($parsed);
+        switch (json_last_error()) {
+            case JSON_ERROR_NONE:
+                return static::decompile($parsed);
+                break;
+            case JSON_ERROR_DEPTH:
+                throw (new JsonParseException('Maximum stack depth exceeded', JSON_ERROR_DEPTH))->setJson($json);
+                break;
+            case JSON_ERROR_STATE_MISMATCH:
+                throw (new JsonParseException('Underflow or the modes mismatch', JSON_ERROR_STATE_MISMATCH))->setJson($json);
+                break;
+            case JSON_ERROR_CTRL_CHAR:
+                throw (new JsonParseException('Unexpected control character found', JSON_ERROR_CTRL_CHAR))->setJson($json);
+                break;
+            case JSON_ERROR_SYNTAX:
+                throw (new JsonParseException('Syntax error, malformed JSON', JSON_ERROR_SYNTAX))->setJson($json);
+                break;
+            case JSON_ERROR_UTF8:
+                throw (new JsonParseException('Malformed UTF-8 characters, possibly incorrectly encoded', JSON_ERROR_UTF8))->setJson($json);
+                break;
+            default:
+                throw (new JsonParseException('Unknown error'))->setJson($json);
+                break;
+        }
     }
 
     /**
