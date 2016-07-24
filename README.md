@@ -1,7 +1,7 @@
 Crell\ApiProblem
 ================
 
-[![Build Status](https://secure.travis-ci.org/Crell/ApiProblem.png)](http://travis-ci.org/crell/ApiProblem)
+[![Build Status](https://secure.travis-ci.org/Crell/ApiProblem.png)](http://travis-ci.org/Crell/ApiProblem)
 
 This library provides a simple and straightforward implementation of the
 [IETF Problem specification][1], RFC 7809.
