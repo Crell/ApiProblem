@@ -4,11 +4,11 @@ Crell\ApiProblem
 [![Build Status](https://travis-ci.org/Crell/ApiProblem.svg?branch=master)](https://travis-ci.org/Crell/ApiProblem)
 
 This library provides a simple and straightforward implementation of the
-[IETF Problem specification][1], RFC 7809.
+IETF Problem Details for HTTP APIs, [RFC 7807][1].
 
-RFC 7809 is a simple specification for formatting error responses from RESTful
+[RFC 7807][1] is a simple specification for formatting error responses from RESTful
 APIs on the web.  This library provides a simple and convenient way to interact
-with that specification.  It supports generating and parsing RFC 7809 messages,
+with that specification.  It supports generating and parsing [RFC 7807][1] messages,
 in both JSON and XML variants.
 
 ## Generating responses
@@ -76,5 +76,5 @@ statement intact, otherwise have fun."  See LICENSE for more information.
 Pull requests accepted!  The goal is complete conformance with the IETF spec.
 This library will be updated as needed for future drafts.
 
-[1]: http://tools.ietf.org/html/draft-nottingham-http-problem-07
+[1]: https://tools.ietf.org/html/rfc7807
 [2]: http://getcomposer.org/
