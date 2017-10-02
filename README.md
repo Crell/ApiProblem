@@ -31,8 +31,8 @@ $problem['accounts'] = array(
 $json_string = $problem->asJson();
 
 // Now send that JSON string as a response along with the appropriate HTTP error
-// code and content type which is available via ApiProblem::CONTENT_TYPE.
-// Also check out asXml() for the angle-bracket fans in the room.
+// code and content type which is available via ApiProblem::CONTENT_TYPE_JSON.
+// Also check out asXml() and ApiProblem::CONTENT_TYPE_XML for the angle-bracket fans in the room.
 
 ```
 

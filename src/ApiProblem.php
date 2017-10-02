@@ -39,12 +39,20 @@ class ApiProblem implements \ArrayAccess
 {
 
     /**
-     * The content type for a HTTP response carrying
+     * The content type for a JSON based HTTP response carrying
      * problem details.
      *
      * @var string
      */
-    const CONTENT_TYPE = 'application/problem+json';
+    const CONTENT_TYPE_JSON = 'application/problem+json';
+
+    /**
+     * The content type for a XML based HTTP response carrying
+     * problem details.
+     *
+     * @var string
+     */
+    const CONTENT_TYPE_XML = 'application/problem+xml';
 
     /**
      *  A short, human-readable summary of the problem type.

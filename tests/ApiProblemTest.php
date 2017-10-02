@@ -32,7 +32,8 @@ class ApiProblemTest extends \PHPUnit_Framework_TestCase
 
     public function testContentType()
     {
-        $this->assertEquals('application/problem+json', ApiProblem::CONTENT_TYPE);
+        $this->assertEquals('application/problem+json', ApiProblem::CONTENT_TYPE_JSON);
+        $this->assertEquals('application/problem+xml', ApiProblem::CONTENT_TYPE_XML);
     }
 
     public function testSimpleExtraProperty()
