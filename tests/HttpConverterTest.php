@@ -6,10 +6,23 @@ namespace Crell\ApiProblem\Test;
 
 use Crell\ApiProblem\ApiProblem;
 use Crell\ApiProblem\HttpConverter;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
 use Zend\Diactoros\Response;
 
 class HttpConverterTest extends \PHPUnit_Framework_TestCase
 {
+
+    protected function getMockResponseFactory()
+    {
+        return new class implements ResponseFactoryInterface
+        {
+            public function createResponse(int $code = 200, string $reasonPhrase = ''): ResponseInterface
+            {
+                return new Response('php://memory', $code);
+            }
+        };
+    }
 
     public function testToJson()
     {
@@ -18,8 +31,8 @@ class HttpConverterTest extends \PHPUnit_Framework_TestCase
         $problem['sir'] = 'Gir';
         $problem['irken']['invader'] = 'Zim';
 
-        $converter = new HttpConverter();
-        $response = $converter->toJsonResponse($problem, new Response());
+        $converter = new HttpConverter($this->getMockResponseFactory());
+        $response = $converter->toJsonResponse($problem);
 
         $this->assertEquals(404, $response->getStatusCode());
         $this->assertEquals('application/problem+json', $response->getHeaderLine('Content-Type'));
@@ -39,8 +52,8 @@ class HttpConverterTest extends \PHPUnit_Framework_TestCase
         $problem['sir'] = 'Gir';
         $problem['irken']['invader'] = 'Zim';
 
-        $converter = new HttpConverter();
-        $response = $converter->toXmlResponse($problem, new Response());
+        $converter = new HttpConverter($this->getMockResponseFactory());
+        $response = $converter->toXmlResponse($problem);
 
         $this->assertEquals(404, $response->getStatusCode());
         $this->assertEquals('application/problem+xml', $response->getHeaderLine('Content-Type'));
