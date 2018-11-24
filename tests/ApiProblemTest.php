@@ -141,7 +141,7 @@ class ApiProblemTest extends \PHPUnit_Framework_TestCase
 
         $invader = $result->xpath('/problem/irken/invader');
         $this->assertCount(1, $invader);
-        while(list( , $node) = each($invader)) {
+        foreach ($invader as $node) {
             $this->assertEquals('Zim', $node);
         }
     }
