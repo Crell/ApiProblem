@@ -1,14 +1,12 @@
 <?php
 
 
-namespace Crell\ApiProblem\Test;
+namespace Crell\ApiProblem;
 
 
-use Crell\ApiProblem\ApiProblem;
-use Crell\ApiProblem\HttpConverter;
 use PHPUnit\Framework\TestCase;
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
+use Psr\Http\Message\ResponseInterface;
 use Zend\Diactoros\Response;
 
 class HttpConverterTest extends TestCase

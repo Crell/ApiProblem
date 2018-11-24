@@ -1,11 +1,9 @@
 <?php
 
 
-namespace Crell\ApiProblem\Test;
+namespace Crell\ApiProblem;
 
 
-use Crell\ApiProblem\ApiProblem;
-use Crell\ApiProblem\JsonParseException;
 use PHPUnit\Framework\TestCase;
 
 /**

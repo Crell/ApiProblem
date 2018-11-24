@@ -11,9 +11,8 @@
  * @package Crell\ApiProblem
  */
 
-namespace Crell\ApiProblem\Test;
+namespace Crell\ApiProblem;
 
-use Crell\ApiProblem\ApiProblem;
 use PHPUnit\Framework\TestCase;
 
 /**

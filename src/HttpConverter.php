@@ -2,9 +2,8 @@
 
 namespace Crell\ApiProblem;
 
-use Psr\Http\Message\ResponseInterface;
-
 use Psr\Http\Message\ResponseFactoryInterface;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Utility class to convert a problem object to an HTTP Response, using PSR-7/17.
