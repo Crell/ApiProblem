@@ -23,22 +23,38 @@ $problem
   ->setInstance("http://example.net/account/12345/msgs/abc");
 // But you can also support any arbitrary extended properties!
 $problem['balance'] = 30;
-$problem['accounts'] = array(
+$problem['accounts'] = [
   "http://example.net/account/12345",
   "http://example.net/account/67890"
-);
+];
 
 $json_string = $problem->asJson();
 
 // Now send that JSON string as a response along with the appropriate HTTP error
 // code and content type which is available via ApiProblem::CONTENT_TYPE_JSON.
 // Also check out asXml() and ApiProblem::CONTENT_TYPE_XML for the angle-bracket fans in the room.
-
 ```
 
 Or, even better, you can subclass ApiProblem for a specific problem type (since
 the type and title are supposed to go together and be relatively fixed), then
 just populate your own error-specific data.  Just like extending an exception!
+
+## Sending Responses
+
+You're probably using [PSR-7][3] for your responses. That's why this library includes a utility to convert your `ApiProblem` object to a PSR-7 `ResponseInterface` object, using a [PSR-17][4] factory of your choice.  Like so:
+
+```php
+$factory = getResponseFactoryFromSomewhere();
+
+// The second paramter says whether to pretty-print the output.
+$converter = new HttpConverter($factory, true);
+
+response = $converter->toJsonResponse($problem);
+// or
+response = $converter->toXmlResponse($problem);
+```
+
+That gives back a fully-functional and marked Response object, ready to send back to the client.
 
 ## Receiving responses
 
@@ -58,14 +74,11 @@ $type = $problem->getType();
 
 ## Installation
 
-The preferred method of installation is via Composer with the following command:
+Install ApiProblem like any other Composer package:
 
     composer require crell/api-problem
 
 See the [Composer documentation][2] for more details.
-
-Alternatively, clone the project and install into your project manually.
-
 
 ## License
 
@@ -75,7 +88,8 @@ statement intact, otherwise have fun."  See LICENSE for more information.
 ## Contributing
 
 Pull requests accepted!  The goal is complete conformance with the IETF spec.
-This library will be updated as needed for future drafts.
 
 [1]: https://tools.ietf.org/html/rfc7807
 [2]: http://getcomposer.org/
+[3]: https://www.php-fig.org/psr/psr-7/
+[4]: https://www.php-fig.org/psr/psr-17/
