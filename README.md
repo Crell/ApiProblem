@@ -1,5 +1,4 @@
-Crell\ApiProblem
-================
+# ApiProblem
 
 [![Build Status](https://travis-ci.org/Crell/ApiProblem.svg?branch=master)](https://travis-ci.org/Crell/ApiProblem)
 
