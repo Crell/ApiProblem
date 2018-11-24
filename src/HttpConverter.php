@@ -52,6 +52,7 @@ class HttpConverter
 
         $body = $response->getBody();
         $body->write($problem->asJson($this->pretty));
+        $body->rewind();
 
         return $response
             ->withHeader('Content-Type', 'application/problem+json')
@@ -72,7 +73,8 @@ class HttpConverter
         $response = $this->toResponse($problem);
 
         $body = $response->getBody();
-        $body->write($problem->asJson($this->pretty));
+        $body->write($problem->asXml($this->pretty));
+        $body->rewind();
 
         return $this->toResponse($problem)
             ->withHeader('Content-Type', 'application/problem+xml')
