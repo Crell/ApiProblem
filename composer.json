@@ -28,7 +28,7 @@
         "psr/http-factory": "Common interfaces for PSR-7 HTTP message factories"
     },
     "require-dev": {
-        "phpunit/phpunit": "5.*",
+        "phpunit/phpunit": "4.*",
         "psr/http-factory": "^1.0",
         "psr/http-message": "1.*",
         "zendframework/zend-diactoros": "~1.0"
