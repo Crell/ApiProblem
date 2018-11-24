@@ -26,6 +26,8 @@ class HttpConverter
     /**
      * HttpConverter constructor.
      *
+     * @param ResponseFactoryInterface $responseFactory
+     *   An HTTP Response factory that can give us a Response object.
      * @param bool $pretty
      *   Whether or not the response body should be pretty-printed.
      */
@@ -40,8 +42,6 @@ class HttpConverter
      *
      * @param ApiProblem $problem
      *   The problem to convert.
-     * @param ResponseInterface $response
-     *   The Response object to populate.
      *
      * @return ResponseInterface
      *   The appropriate response object.
@@ -63,8 +63,6 @@ class HttpConverter
      *
      * @param ApiProblem $problem
      *   The problem to convert.
-     * @param ResponseInterface $response
-     *   The Response object to populate.
      *
      * @return ResponseInterface
      *   The appropriate response object.
