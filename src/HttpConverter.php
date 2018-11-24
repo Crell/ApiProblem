@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=0);
+
 namespace Crell\ApiProblem;
 
 use Psr\Http\Message\ResponseFactoryInterface;

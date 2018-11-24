@@ -1,8 +1,8 @@
 <?php
 
+declare(strict_types=0);
 
 namespace Crell\ApiProblem;
-
 
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseFactoryInterface;
