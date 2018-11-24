@@ -1,11 +1,10 @@
 <?php
 
+declare(strict_types=0);
 
-namespace Crell\ApiProblem\Test;
+namespace Crell\ApiProblem;
 
-
-use Crell\ApiProblem\ApiProblem;
-use Crell\ApiProblem\JsonParseException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for the JSON error handling.
@@ -13,21 +12,21 @@ use Crell\ApiProblem\JsonParseException;
  * @todo Add tests for something other than invalid syntax, as that's all I
  * can figure out how to cause. :-)
  */
-class JsonErrorTest extends \PHPUnit_Framework_TestCase
+class JsonErrorTest extends TestCase
 {
 
     /**
      * @expectedException \Crell\ApiProblem\JsonParseException
      * @expectedExceptionCode JSON_ERROR_SYNTAX
      */
-    public function testMalformedJson()
+    public function testMalformedJson() : void
     {
         // Note the stray comma.
         $json = '{"a": "b",}';
         ApiProblem::fromJson($json);
     }
 
-    public function testJsonExceptionString()
+    public function testJsonExceptionString() : void
     {
         // Note the stray comma.
         $json = '{"a": "b",}';

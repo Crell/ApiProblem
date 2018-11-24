@@ -1,36 +1,27 @@
 <?php
 
-/**
- * This file is part of the ApiProblem library.
- *
- * (c) Larry Garfield <larry@garfieldtech.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * @package Crell\ApiProblem
- */
+declare(strict_types=0);
 
-namespace Crell\ApiProblem\Test;
+namespace Crell\ApiProblem;
 
-use Crell\ApiProblem\ApiProblem;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for the ApiProblem object.
  *
  * @autor Larry Garfield
  */
-class ApiProblemTest extends \PHPUnit_Framework_TestCase
+class ApiProblemTest extends TestCase
 {
 
-    public function testConstructor()
+    public function testConstructor() : void
     {
         $problem = new ApiProblem('Title', 'URI');
         $this->assertEquals("Title", $problem->getTitle());
         $this->assertEquals("URI", $problem->getType());
     }
 
-    public function testSimpleExtraProperty()
+    public function testSimpleExtraProperty() : void
     {
         $problem = new ApiProblem('Title', 'URI');
 
@@ -42,7 +33,7 @@ class ApiProblemTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($problem['sir']);
     }
 
-    public function testComplexExtraProperty()
+    public function testComplexExtraProperty() : void
     {
         $problem = new ApiProblem('Title', 'URI');
 
@@ -51,7 +42,7 @@ class ApiProblemTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Zim', $problem['irken']['invader']);
     }
 
-    public function testSimpleJsonCompile()
+    public function testSimpleJsonCompile() : void
     {
         $problem = new ApiProblem('Title', 'URI');
 
@@ -67,7 +58,7 @@ class ApiProblemTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayNotHasKey('detail', $result);
     }
 
-    public function testExtraPropertyJsonCompile()
+    public function testExtraPropertyJsonCompile() : void
     {
         $problem = new ApiProblem('Title', 'URI');
         $problem['sir'] = 'Gir';
@@ -85,8 +76,10 @@ class ApiProblemTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Confirms that the title property is optional.
+     *
+     * @doesNotPerformAssertions
      */
-    public function testNoTitleAllowed()
+    public function testNoTitleAllowed() : void
     {
         // This should result in no error.
         $problem = new ApiProblem();
@@ -96,7 +89,7 @@ class ApiProblemTest extends \PHPUnit_Framework_TestCase
     /**
      * Confirms that the type property defaults to "about:blank"
      */
-    public function testTypeDefault()
+    public function testTypeDefault() : void
     {
         $problem = new ApiProblem('Title');
         $json = $problem->asJson();
@@ -104,7 +97,7 @@ class ApiProblemTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('about:blank', $result['type']);
     }
 
-    public function testSimpleXmlCompile()
+    public function testSimpleXmlCompile() : void
     {
         $problem = new ApiProblem('Title', 'URI');
 
@@ -119,7 +112,7 @@ class ApiProblemTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Title', $titles->item(0)->textContent);
     }
 
-    public function testExtraPropertyXmlCompile()
+    public function testExtraPropertyXmlCompile() : void
     {
         $problem = new ApiProblem('Title', 'URI');
         $problem['sir'] = 'Gir';
@@ -146,7 +139,7 @@ class ApiProblemTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testParseJson()
+    public function testParseJson() : void
     {
         $problem = new ApiProblem('Title', 'URI');
         $problem->setStatus(403);
@@ -165,7 +158,7 @@ class ApiProblemTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Zim', $result['irken']['invader']);
     }
 
-    public function testParseXml()
+    public function testParseXml() : void
     {
         $problem = new ApiProblem('Title', 'URI');
         $problem->setStatus(403);
@@ -180,7 +173,7 @@ class ApiProblemTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Zim', $result['irken']['invader']);
     }
 
-    public function testArray()
+    public function testArray() : void
     {
         $problem = new ApiProblem('Title', 'URI');
         $problem->setStatus(403);
@@ -195,7 +188,8 @@ class ApiProblemTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Zim', $array['irken']['invader']);
     }
 
-    public function testPrettyPrintJson() {
+    public function testPrettyPrintJson() : void
+    {
         $problem = new ApiProblem('Title', 'URI');
         $problem->setStatus(403);
         $problem['sir'] = 'Gir';

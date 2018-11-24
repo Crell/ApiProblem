@@ -1,15 +1,6 @@
 <?php
 
-/**
- * This file is part of the ApiProblem library.
- *
- * (c) Larry Garfield <larry@garfieldtech.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * @package Crell\ApiProblem
- */
+declare(strict_types=0);
 
 namespace Crell\ApiProblem;
 
@@ -129,7 +120,7 @@ class ApiProblem implements \ArrayAccess
      *
      * @var array
      */
-    protected $extensions = array();
+    protected $extensions = [];
 
     /**
      * Parses a JSON string into a Problem object.
@@ -142,7 +133,7 @@ class ApiProblem implements \ArrayAccess
      * @throws JsonParseException
      *   Invalid JSON strings will result in a thrown exception.
      */
-    public static function fromJson($json)
+    public static function fromJson(string $json) : self
     {
         if (empty($json)) {
             throw (new JsonParseException('An empty string is not a valid JSON value', JSON_ERROR_SYNTAX))->setJson($json);
@@ -182,7 +173,7 @@ class ApiProblem implements \ArrayAccess
      * @return array
      *   A nested array corresponding to the XML element provided.
      */
-    protected static function xmlToArray(\SimpleXMLElement $element)
+    protected static function xmlToArray(\SimpleXMLElement $element) : array
     {
         $data = (array)$element;
         foreach ($data as $key => $value) {
@@ -202,7 +193,7 @@ class ApiProblem implements \ArrayAccess
      * @return ApiProblem
      *   A newly constructed problem object.
      */
-    public static function fromXml($string)
+    public static function fromXml(string $string) : self
     {
         $xml = new \SimpleXMLElement($string);
 
@@ -219,7 +210,7 @@ class ApiProblem implements \ArrayAccess
      * @return ApiProblem
      *   A new ApiProblem object.
      */
-    protected static function decompile(array $parsed)
+    protected static function decompile(array $parsed) : self
     {
         $problem = new static();
 
@@ -263,7 +254,7 @@ class ApiProblem implements \ArrayAccess
      *   dereferenced, it SHOULD provide human-readable documentation for the
      *   problem type (e.g., using HTML).
      */
-    public function __construct($title = '', $type = 'about:blank')
+    public function __construct(string $title = '', string $type = 'about:blank')
     {
         if ($title) {
             $this->title = $title;
@@ -279,7 +270,7 @@ class ApiProblem implements \ArrayAccess
      * @return string
      *   The current title.
      */
-    public function getTitle()
+    public function getTitle() : string
     {
         return $this->title;
     }
@@ -292,7 +283,7 @@ class ApiProblem implements \ArrayAccess
      *  @return ApiProblem
      *   The invoked object.
      */
-    public function setTitle($title)
+    public function setTitle(string $title) : self
     {
         $this->title = $title;
         return $this;
@@ -304,7 +295,7 @@ class ApiProblem implements \ArrayAccess
      * @return string
      *   The problem type URI of this problem.
      */
-    public function getType()
+    public function getType() : string
     {
         return $this->type;
     }
@@ -317,7 +308,7 @@ class ApiProblem implements \ArrayAccess
      * @return ApiProblem
      *   The invoked object.
      */
-    public function setType($type)
+    public function setType(string $type) : self
     {
         $this->type = $type;
         return $this;
@@ -329,7 +320,7 @@ class ApiProblem implements \ArrayAccess
      * @return string
      *   The detail of this problem.
      */
-    public function getDetail()
+    public function getDetail() : string
     {
         return $this->detail;
     }
@@ -342,7 +333,7 @@ class ApiProblem implements \ArrayAccess
      * @return ApiProblem
      *   The invoked object.
      */
-    public function setDetail($detail)
+    public function setDetail(string $detail) : self
     {
         $this->detail = $detail;
         return $this;
@@ -354,7 +345,7 @@ class ApiProblem implements \ArrayAccess
      * @return string
      *   The problem instance URI of this problem.
      */
-    public function getInstance()
+    public function getInstance() : string
     {
         return $this->instance;
     }
@@ -369,7 +360,7 @@ class ApiProblem implements \ArrayAccess
      * @return ApiProblem
      *   The invoked object.
      */
-    public function setInstance($instance)
+    public function setInstance(string $instance) : self
     {
         $this->instance = $instance;
         return $this;
@@ -381,7 +372,7 @@ class ApiProblem implements \ArrayAccess
      * @return int
      *   The current HTTP status code. If not set, it will return 0.
      */
-    public function getStatus()
+    public function getStatus() : int
     {
         return $this->status ?: 0;
     }
@@ -397,7 +388,7 @@ class ApiProblem implements \ArrayAccess
      * @return ApiProblem
      *   The invoked object.
      */
-    public function setStatus($status)
+    public function setStatus(int $status) : self
     {
         $this->status = $status;
         return $this;
@@ -406,12 +397,12 @@ class ApiProblem implements \ArrayAccess
     /**
      * Renders this problem as JSON.
      *
-     * @param boolean $pretty
+     * @param bool $pretty
      *   Whether or not to pretty-print the JSON string for easier debugging.
      * @return string
      *   A JSON string representing this problem.
      */
-    public function asJson($pretty = false)
+    public function asJson(bool $pretty = false)
     {
         $response = $this->compile();
 
@@ -426,12 +417,12 @@ class ApiProblem implements \ArrayAccess
     /**
      * Renders this problem as XML.
      *
-     * @param boolean $pretty
+     * @param bool $pretty
      *   Whether or not to pretty-print the XML string for easier debugging.
      * @return string
      *   An XML string representing this problem.
      */
-    public function asXml($pretty = false)
+    public function asXml(bool $pretty = false)
     {
         $doc = new \SimpleXMLElement('<problem></problem>');
 
@@ -454,7 +445,7 @@ class ApiProblem implements \ArrayAccess
      * @return array
      *   The API problem represented as an array.
     */
-    public function asArray()
+    public function asArray() : array
     {
         return $this->compile();
     }
@@ -465,13 +456,13 @@ class ApiProblem implements \ArrayAccess
      * @return array
      *   This object, rendered to an array.
      */
-    protected function compile()
+    protected function compile() : array
     {
         // Start with any extensions, since that's already an array.
         $response = $this->extensions;
 
         // These properties are optional.
-        foreach (array('title', 'type', 'status', 'detail', 'instance') as $key) {
+        foreach (['title', 'type', 'status', 'detail', 'instance'] as $key) {
             if (!empty($this->$key)) {
                 $response[$key] = $this->$key;
             }
