@@ -55,7 +55,7 @@ class HttpConverter
         $body->rewind();
 
         return $response
-            ->withHeader('Content-Type', 'application/problem+json')
+            ->withHeader('Content-Type', ApiProblem::CONTENT_TYPE_JSON)
             ->withBody($body);
     }
 
@@ -77,7 +77,7 @@ class HttpConverter
         $body->rewind();
 
         return $this->toResponse($problem)
-            ->withHeader('Content-Type', 'application/problem+xml')
+            ->withHeader('Content-Type', ApiProblem::CONTENT_TYPE_XML)
             ->withBody($body);
     }
 
