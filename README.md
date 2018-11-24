@@ -46,9 +46,9 @@ $factory = getResponseFactoryFromSomewhere();
 // The second paramter says whether to pretty-print the output.
 $converter = new HttpConverter($factory, true);
 
-response = $converter->toJsonResponse($problem);
+$response = $converter->toJsonResponse($problem);
 // or
-response = $converter->toXmlResponse($problem);
+$response = $converter->toXmlResponse($problem);
 ```
 
 That gives back a fully-functional and marked Response object, ready to send back to the client.
