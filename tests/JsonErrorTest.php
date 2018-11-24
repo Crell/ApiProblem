@@ -19,14 +19,14 @@ class JsonErrorTest extends TestCase
      * @expectedException \Crell\ApiProblem\JsonParseException
      * @expectedExceptionCode JSON_ERROR_SYNTAX
      */
-    public function testMalformedJson()
+    public function testMalformedJson() : void
     {
         // Note the stray comma.
         $json = '{"a": "b",}';
         ApiProblem::fromJson($json);
     }
 
-    public function testJsonExceptionString()
+    public function testJsonExceptionString() : void
     {
         // Note the stray comma.
         $json = '{"a": "b",}';

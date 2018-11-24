@@ -30,7 +30,7 @@ class HttpConverter
      * @param bool $pretty
      *   Whether or not the response body should be pretty-printed.
      */
-    public function __construct(ResponseFactoryInterface $responseFactory, $pretty = false)
+    public function __construct(ResponseFactoryInterface $responseFactory, bool $pretty = false)
     {
         $this->responseFactory = $responseFactory;
         $this->pretty = $pretty;
@@ -45,7 +45,7 @@ class HttpConverter
      * @return ResponseInterface
      *   The appropriate response object.
      */
-    public function toJsonResponse(ApiProblem $problem)
+    public function toJsonResponse(ApiProblem $problem) : ResponseInterface
     {
         $response = $this->toResponse($problem);
 
@@ -67,7 +67,7 @@ class HttpConverter
      * @return ResponseInterface
      *   The appropriate response object.
      */
-    public function toXmlResponse(ApiProblem $problem)
+    public function toXmlResponse(ApiProblem $problem) : ResponseInterface
     {
         $response = $this->toResponse($problem);
 
@@ -89,7 +89,7 @@ class HttpConverter
      * @return ResponseInterface
      *   The appropriate response object.
      */
-    protected function toResponse(ApiProblem $problem)
+    protected function toResponse(ApiProblem $problem) : ResponseInterface
     {
         $status = $problem->getStatus() ?: 500;
 

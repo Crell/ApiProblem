@@ -12,7 +12,7 @@ use Zend\Diactoros\Response;
 class HttpConverterTest extends TestCase
 {
 
-    protected function getMockResponseFactory()
+    protected function getMockResponseFactory() : ResponseFactoryInterface
     {
         return new class implements ResponseFactoryInterface
         {
@@ -23,7 +23,7 @@ class HttpConverterTest extends TestCase
         };
     }
 
-    public function testToJson()
+    public function testToJson() : void
     {
         $problem = new ApiProblem('Title', 'URI');
         $problem->setStatus(404);
@@ -44,7 +44,7 @@ class HttpConverterTest extends TestCase
         $this->assertEquals('Zim', $returned_problem['irken']['invader']);
     }
 
-    public function testToXml()
+    public function testToXml() : void
     {
         $problem = new ApiProblem('Title', 'URI');
         $problem->setStatus(404);

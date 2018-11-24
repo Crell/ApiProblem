@@ -23,14 +23,14 @@ use PHPUnit\Framework\TestCase;
 class ApiProblemTest extends TestCase
 {
 
-    public function testConstructor()
+    public function testConstructor() : void
     {
         $problem = new ApiProblem('Title', 'URI');
         $this->assertEquals("Title", $problem->getTitle());
         $this->assertEquals("URI", $problem->getType());
     }
 
-    public function testSimpleExtraProperty()
+    public function testSimpleExtraProperty() : void
     {
         $problem = new ApiProblem('Title', 'URI');
 
@@ -42,7 +42,7 @@ class ApiProblemTest extends TestCase
         $this->assertNull($problem['sir']);
     }
 
-    public function testComplexExtraProperty()
+    public function testComplexExtraProperty() : void
     {
         $problem = new ApiProblem('Title', 'URI');
 
@@ -51,7 +51,7 @@ class ApiProblemTest extends TestCase
         $this->assertEquals('Zim', $problem['irken']['invader']);
     }
 
-    public function testSimpleJsonCompile()
+    public function testSimpleJsonCompile() : void
     {
         $problem = new ApiProblem('Title', 'URI');
 
@@ -67,7 +67,7 @@ class ApiProblemTest extends TestCase
         $this->assertArrayNotHasKey('detail', $result);
     }
 
-    public function testExtraPropertyJsonCompile()
+    public function testExtraPropertyJsonCompile() : void
     {
         $problem = new ApiProblem('Title', 'URI');
         $problem['sir'] = 'Gir';
@@ -88,7 +88,7 @@ class ApiProblemTest extends TestCase
      *
      * @doesNotPerformAssertions
      */
-    public function testNoTitleAllowed()
+    public function testNoTitleAllowed() : void
     {
         // This should result in no error.
         $problem = new ApiProblem();
@@ -98,7 +98,7 @@ class ApiProblemTest extends TestCase
     /**
      * Confirms that the type property defaults to "about:blank"
      */
-    public function testTypeDefault()
+    public function testTypeDefault() : void
     {
         $problem = new ApiProblem('Title');
         $json = $problem->asJson();
@@ -106,7 +106,7 @@ class ApiProblemTest extends TestCase
         $this->assertEquals('about:blank', $result['type']);
     }
 
-    public function testSimpleXmlCompile()
+    public function testSimpleXmlCompile() : void
     {
         $problem = new ApiProblem('Title', 'URI');
 
@@ -121,7 +121,7 @@ class ApiProblemTest extends TestCase
         $this->assertEquals('Title', $titles->item(0)->textContent);
     }
 
-    public function testExtraPropertyXmlCompile()
+    public function testExtraPropertyXmlCompile() : void
     {
         $problem = new ApiProblem('Title', 'URI');
         $problem['sir'] = 'Gir';
@@ -148,7 +148,7 @@ class ApiProblemTest extends TestCase
         }
     }
 
-    public function testParseJson()
+    public function testParseJson() : void
     {
         $problem = new ApiProblem('Title', 'URI');
         $problem->setStatus(403);
@@ -167,7 +167,7 @@ class ApiProblemTest extends TestCase
         $this->assertEquals('Zim', $result['irken']['invader']);
     }
 
-    public function testParseXml()
+    public function testParseXml() : void
     {
         $problem = new ApiProblem('Title', 'URI');
         $problem->setStatus(403);
@@ -182,7 +182,7 @@ class ApiProblemTest extends TestCase
         $this->assertEquals('Zim', $result['irken']['invader']);
     }
 
-    public function testArray()
+    public function testArray() : void
     {
         $problem = new ApiProblem('Title', 'URI');
         $problem->setStatus(403);
@@ -197,7 +197,8 @@ class ApiProblemTest extends TestCase
         $this->assertEquals('Zim', $array['irken']['invader']);
     }
 
-    public function testPrettyPrintJson() {
+    public function testPrettyPrintJson() : void
+    {
         $problem = new ApiProblem('Title', 'URI');
         $problem->setStatus(403);
         $problem['sir'] = 'Gir';
