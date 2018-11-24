@@ -6,6 +6,7 @@ namespace Crell\ApiProblem\Test;
 
 use Crell\ApiProblem\ApiProblem;
 use Crell\ApiProblem\JsonParseException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for the JSON error handling.
@@ -13,7 +14,7 @@ use Crell\ApiProblem\JsonParseException;
  * @todo Add tests for something other than invalid syntax, as that's all I
  * can figure out how to cause. :-)
  */
-class JsonErrorTest extends \PHPUnit_Framework_TestCase
+class JsonErrorTest extends TestCase
 {
 
     /**

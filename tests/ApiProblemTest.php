@@ -14,13 +14,14 @@
 namespace Crell\ApiProblem\Test;
 
 use Crell\ApiProblem\ApiProblem;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for the ApiProblem object.
  *
  * @autor Larry Garfield
  */
-class ApiProblemTest extends \PHPUnit_Framework_TestCase
+class ApiProblemTest extends TestCase
 {
 
     public function testConstructor()
@@ -85,6 +86,8 @@ class ApiProblemTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Confirms that the title property is optional.
+     *
+     * @doesNotPerformAssertions
      */
     public function testNoTitleAllowed()
     {

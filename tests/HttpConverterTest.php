@@ -6,11 +6,12 @@ namespace Crell\ApiProblem\Test;
 
 use Crell\ApiProblem\ApiProblem;
 use Crell\ApiProblem\HttpConverter;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Zend\Diactoros\Response;
 
-class HttpConverterTest extends \PHPUnit_Framework_TestCase
+class HttpConverterTest extends TestCase
 {
 
     protected function getMockResponseFactory()
