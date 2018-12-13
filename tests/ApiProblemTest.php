@@ -24,11 +24,11 @@ class ApiProblemTest extends TestCase
     public function testConstructorWithDefaults() : void
     {
         $problem = new ApiProblem();
-        $this->assertNull($problem->getTitle());
+        $this->assertSame('', $problem->getTitle());
         $this->assertSame('about:blank', $problem->getType());
-        $this->assertNull($problem->getDetail());
-        $this->assertNull($problem->getInstance());
-        $this->assertNull($problem->getTitle());
+        $this->assertSame('', $problem->getDetail());
+        $this->assertSame('', $problem->getInstance());
+        $this->assertSame('', $problem->getTitle());
     }
 
     public function testSimpleExtraProperty() : void

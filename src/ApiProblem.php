@@ -51,7 +51,7 @@ class ApiProblem implements \ArrayAccess
      *  It SHOULD NOT change from occurrence to occurrence of the problem,
      *  except for purposes of localization.
      *
-     * @var null|string
+     * @var string
      */
     protected $title;
 
@@ -86,7 +86,7 @@ class ApiProblem implements \ArrayAccess
      *
      * @var int
      */
-    protected $status;
+    protected $status = 0;
 
     /**
      * An human readable explanation specific to this occurrence of the problem.
@@ -97,9 +97,9 @@ class ApiProblem implements \ArrayAccess
      * Consumers SHOULD NOT parse the "detail" member for information; extensions
      * are more suitable and less error-prone ways to obtain such information.
      *
-     * @var null|string
+     * @var string
      */
-    protected $detail;
+    protected $detail = '';
 
     /**
      * A URI reference that identifies the specific occurrence of the problem.
@@ -111,9 +111,9 @@ class ApiProblem implements \ArrayAccess
      *
      * @link http://tools.ietf.org/html/rfc3986
      *
-     * @var null|string
+     * @var string
      */
-    protected $instance;
+    protected $instance = '';
 
     /**
      * Any arbitrary extension properties that have been assigned on this object.
@@ -254,7 +254,7 @@ class ApiProblem implements \ArrayAccess
      *   dereferenced, it SHOULD provide human-readable documentation for the
      *   problem type (e.g., using HTML).
      */
-    public function __construct(?string $title = null, string $type = 'about:blank')
+    public function __construct(?string $title = '', string $type = 'about:blank')
     {
         $this->title = $title;
         $this->type = $type;
@@ -263,10 +263,10 @@ class ApiProblem implements \ArrayAccess
     /**
      * Retrieves the title of the problem.
      *
-     * @return null|string
+     * @return string
      *   The current title.
      */
-    public function getTitle() : ?string
+    public function getTitle() : string
     {
         return $this->title;
     }
@@ -274,12 +274,12 @@ class ApiProblem implements \ArrayAccess
     /**
      * Sets the title for this problem.
      *
-     * @param null|string $title
+     * @param string $title
      *   The title to set.
      *  @return ApiProblem
      *   The invoked object.
      */
-    public function setTitle(?string $title) : self
+    public function setTitle(string $title) : self
     {
         $this->title = $title;
         return $this;
@@ -313,10 +313,10 @@ class ApiProblem implements \ArrayAccess
     /**
      * Retrieves the detail information of the problem.
      *
-     * @return null|string
+     * @return string
      *   The detail of this problem.
      */
-    public function getDetail() : ?string
+    public function getDetail() : string
     {
         return $this->detail;
     }
@@ -324,12 +324,12 @@ class ApiProblem implements \ArrayAccess
     /**
      * Sets the detail for this problem.
      *
-     * @param null|string $detail
+     * @param string $detail
      *   The human-readable detail string about this problem.
      * @return ApiProblem
      *   The invoked object.
      */
-    public function setDetail(?string $detail) : self
+    public function setDetail(string $detail) : self
     {
         $this->detail = $detail;
         return $this;
@@ -338,10 +338,10 @@ class ApiProblem implements \ArrayAccess
     /**
      * Returns the problem instance URI of this problem.
      *
-     * @return null|string
+     * @return string
      *   The problem instance URI of this problem.
      */
-    public function getInstance() : ?string
+    public function getInstance() : string
     {
         return $this->instance;
     }
@@ -349,14 +349,14 @@ class ApiProblem implements \ArrayAccess
     /**
      * Sets the problem instance URI of this problem.
      *
-     * @param null|string $instance
+     * @param string $instance
      *   An absolute URI that uniquely identifies this problem. It MAY link to
      *   further information about the error, but that is not required.
      *
      * @return ApiProblem
      *   The invoked object.
      */
-    public function setInstance(?string $instance) : self
+    public function setInstance(string $instance) : self
     {
         $this->instance = $instance;
         return $this;
@@ -370,7 +370,7 @@ class ApiProblem implements \ArrayAccess
      */
     public function getStatus() : int
     {
-        return $this->status ?: 0;
+        return $this->status;
     }
 
     /**
