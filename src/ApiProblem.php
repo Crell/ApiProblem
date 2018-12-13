@@ -245,7 +245,7 @@ class ApiProblem implements \ArrayAccess
     /**
      * Constructs a new ApiProblem.
      *
-     * @param null|string $title
+     * @param string $title
      *   A short, human-readable summary of the problem type.  It SHOULD NOT
      *   change from occurrence to occurrence of the problem, except for
      *   purposes of localization.
@@ -254,7 +254,7 @@ class ApiProblem implements \ArrayAccess
      *   dereferenced, it SHOULD provide human-readable documentation for the
      *   problem type (e.g., using HTML).
      */
-    public function __construct(?string $title = '', string $type = 'about:blank')
+    public function __construct(string $title = '', string $type = 'about:blank')
     {
         $this->title = $title;
         $this->type = $type;
