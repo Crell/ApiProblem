@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=0);
+declare(strict_types=1);
 
 namespace Crell\ApiProblem;
 
@@ -19,6 +19,16 @@ class ApiProblemTest extends TestCase
         $problem = new ApiProblem('Title', 'URI');
         $this->assertEquals("Title", $problem->getTitle());
         $this->assertEquals("URI", $problem->getType());
+    }
+
+    public function testConstructorWithDefaults() : void
+    {
+        $problem = new ApiProblem();
+        $this->assertNull($problem->getTitle());
+        $this->assertSame('about:blank', $problem->getType());
+        $this->assertNull($problem->getDetail());
+        $this->assertNull($problem->getInstance());
+        $this->assertNull($problem->getTitle());
     }
 
     public function testSimpleExtraProperty() : void

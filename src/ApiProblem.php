@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=0);
+declare(strict_types=1);
 
 namespace Crell\ApiProblem;
 
@@ -35,7 +35,7 @@ class ApiProblem implements \ArrayAccess
      *
      * @var string
      */
-    const CONTENT_TYPE_JSON = 'application/problem+json';
+    public const CONTENT_TYPE_JSON = 'application/problem+json';
 
     /**
      * The content type for a XML based HTTP response carrying
@@ -43,7 +43,7 @@ class ApiProblem implements \ArrayAccess
      *
      * @var string
      */
-    const CONTENT_TYPE_XML = 'application/problem+xml';
+    public const CONTENT_TYPE_XML = 'application/problem+xml';
 
     /**
      *  A short, human-readable summary of the problem type.
@@ -51,7 +51,7 @@ class ApiProblem implements \ArrayAccess
      *  It SHOULD NOT change from occurrence to occurrence of the problem,
      *  except for purposes of localization.
      *
-     * @var string
+     * @var null|string
      */
     protected $title;
 
@@ -97,7 +97,7 @@ class ApiProblem implements \ArrayAccess
      * Consumers SHOULD NOT parse the "detail" member for information; extensions
      * are more suitable and less error-prone ways to obtain such information.
      *
-     * @var string
+     * @var null|string
      */
     protected $detail;
 
@@ -111,7 +111,7 @@ class ApiProblem implements \ArrayAccess
      *
      * @link http://tools.ietf.org/html/rfc3986
      *
-     * @var string
+     * @var null|string
      */
     protected $instance;
 
@@ -222,7 +222,7 @@ class ApiProblem implements \ArrayAccess
             $problem->setType($parsed['type']);
         }
         if (!empty($parsed['status'])) {
-            $problem->setStatus($parsed['status']);
+            $problem->setStatus((int) $parsed['status']);
         }
         if (!empty($parsed['detail'])) {
             $problem->setDetail($parsed['detail']);
@@ -245,7 +245,7 @@ class ApiProblem implements \ArrayAccess
     /**
      * Constructs a new ApiProblem.
      *
-     * @param string $title
+     * @param null|string $title
      *   A short, human-readable summary of the problem type.  It SHOULD NOT
      *   change from occurrence to occurrence of the problem, except for
      *   purposes of localization.
@@ -254,23 +254,19 @@ class ApiProblem implements \ArrayAccess
      *   dereferenced, it SHOULD provide human-readable documentation for the
      *   problem type (e.g., using HTML).
      */
-    public function __construct(string $title = '', string $type = 'about:blank')
+    public function __construct(?string $title = null, string $type = 'about:blank')
     {
-        if ($title) {
-            $this->title = $title;
-        }
-        if ($type) {
-            $this->type = $type;
-        }
+        $this->title = $title;
+        $this->type = $type;
     }
 
     /**
      * Retrieves the title of the problem.
      *
-     * @return string
+     * @return null|string
      *   The current title.
      */
-    public function getTitle() : string
+    public function getTitle() : ?string
     {
         return $this->title;
     }
@@ -278,12 +274,12 @@ class ApiProblem implements \ArrayAccess
     /**
      * Sets the title for this problem.
      *
-     * @param string $title
+     * @param null|string $title
      *   The title to set.
      *  @return ApiProblem
      *   The invoked object.
      */
-    public function setTitle(string $title) : self
+    public function setTitle(?string $title) : self
     {
         $this->title = $title;
         return $this;
@@ -317,10 +313,10 @@ class ApiProblem implements \ArrayAccess
     /**
      * Retrieves the detail information of the problem.
      *
-     * @return string
+     * @return null|string
      *   The detail of this problem.
      */
-    public function getDetail() : string
+    public function getDetail() : ?string
     {
         return $this->detail;
     }
@@ -328,12 +324,12 @@ class ApiProblem implements \ArrayAccess
     /**
      * Sets the detail for this problem.
      *
-     * @param string $detail
+     * @param null|string $detail
      *   The human-readable detail string about this problem.
      * @return ApiProblem
      *   The invoked object.
      */
-    public function setDetail(string $detail) : self
+    public function setDetail(?string $detail) : self
     {
         $this->detail = $detail;
         return $this;
@@ -342,10 +338,10 @@ class ApiProblem implements \ArrayAccess
     /**
      * Returns the problem instance URI of this problem.
      *
-     * @return string
+     * @return null|string
      *   The problem instance URI of this problem.
      */
-    public function getInstance() : string
+    public function getInstance() : ?string
     {
         return $this->instance;
     }
@@ -353,14 +349,14 @@ class ApiProblem implements \ArrayAccess
     /**
      * Sets the problem instance URI of this problem.
      *
-     * @param string $instance
+     * @param null|string $instance
      *   An absolute URI that uniquely identifies this problem. It MAY link to
      *   further information about the error, but that is not required.
      *
      * @return ApiProblem
      *   The invoked object.
      */
-    public function setInstance(string $instance) : self
+    public function setInstance(?string $instance) : self
     {
         $this->instance = $instance;
         return $this;
@@ -411,7 +407,13 @@ class ApiProblem implements \ArrayAccess
             $options = JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT;
         }
 
-        return json_encode($response, $options);
+        $json = json_encode($response, $options);
+
+        if (false === $json) {
+            throw new \RuntimeException('Unable to generate encoded json');
+        }
+
+        return $json;
     }
 
     /**
@@ -507,9 +509,9 @@ class ApiProblem implements \ArrayAccess
                     } elseif ($key === 'value') {
                         $element->{0} = $value;
                     } elseif (is_bool($value)) {
-                        $element->addChild($key, intval($value));
+                        $element->addChild($key, (int) $value);
                     } else {
-                        $element->addChild($key, htmlspecialchars($value, ENT_QUOTES));
+                        $element->addChild($key, htmlspecialchars((string) $value, ENT_QUOTES));
                     }
                 } else {
                     $element->addChild($parent, htmlspecialchars($value, ENT_QUOTES));
