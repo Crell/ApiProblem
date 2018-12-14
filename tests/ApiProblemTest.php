@@ -52,6 +52,27 @@ class ApiProblemTest extends TestCase
         $this->assertEquals('Zim', $problem['irken']['invader']);
     }
 
+    public function testSimpleJsonCompileWithJsonException() : void
+    {
+        $this->expectException(JsonEncodeException::class);
+        $this->expectExceptionCode(\JSON_ERROR_UTF8);
+        $this->expectExceptionMessage('Malformed UTF-8 characters, possibly incorrectly encoded');
+
+        // an invalid string value
+        $problem = new ApiProblem(\hex2bin('58efa99d4e19ff4e93efd93f7afb10a5'), 'URI');
+
+        $json = $problem->asJson();
+        $result = json_decode($json, true);
+
+        $this->assertArrayHasKey('title', $result);
+        $this->assertEquals('Title', $result['title']);
+        $this->assertArrayHasKey('type', $result);
+        $this->assertEquals('URI', $result['type']);
+
+        // Ensure that empty properties are not included.
+        $this->assertArrayNotHasKey('detail', $result);
+    }
+
     public function testSimpleJsonCompile() : void
     {
         $problem = new ApiProblem('Title', 'URI');
@@ -147,6 +168,24 @@ class ApiProblemTest extends TestCase
         foreach ($invader as $node) {
             $this->assertEquals('Zim', $node);
         }
+    }
+
+    public function testParseJsonWithEmptyString() : void
+    {
+        $this->expectException(JsonParseException::class);
+        $this->expectExceptionCode(\JSON_ERROR_SYNTAX);
+        $this->expectExceptionMessage('An empty string is not a valid JSON value');
+
+        ApiProblem::fromJson('');
+    }
+
+    public function testParseJsonWithInvalidString() : void
+    {
+        $this->expectException(JsonParseException::class);
+        $this->expectExceptionCode(\JSON_ERROR_SYNTAX);
+        $this->expectExceptionMessage('Syntax error, malformed JSON');
+
+        ApiProblem::fromJson(\hex2bin('58efa99d4e19ff4e93efd93f7afb10a5'));
     }
 
     public function testParseJson() : void
