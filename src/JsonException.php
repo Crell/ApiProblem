@@ -6,6 +6,11 @@ namespace Crell\ApiProblem;
 
 class JsonException extends \InvalidArgumentException
 {
+    /**
+     * This mapping is based on the PHP manual.
+     *
+     * Why this isn't built into the language somewhere I have no idea.
+     */
     protected const EXCEPTION_MESSAGES = [
         \JSON_ERROR_DEPTH => 'Maximum stack depth exceeded',
         \JSON_ERROR_STATE_MISMATCH => 'Underflow or the modes mismatch',
@@ -24,9 +29,31 @@ class JsonException extends \InvalidArgumentException
      */
     protected $failedValue;
 
+    /**
+     * Maps a JSON error code to a human-friendly error message.
+     *
+     * @param int $jsonError
+     *   the JSON error code, as returned by json_last_error().
+     * @return string
+     */
     protected static function getExceptionMessage(int $jsonError): string
     {
         return self::EXCEPTION_MESSAGES[$jsonError] ?? 'Unknown error';
+    }
+
+    /**
+     * Creates a new exception object based on the JSON error code.
+     *
+     * @param int $jsonError
+     *   the JSON error code.
+     * @param $failedValue
+     *   The value that failed to parse or encode.
+     * @return JsonException
+     *   A new exception object.
+     */
+    public static function fromJsonError(int $jsonError, $failedValue): self
+    {
+        return new static(static::getExceptionMessage($jsonError), $jsonError, null, $failedValue);
     }
 
     public function __construct(string $message = '', int $code = 0, \Throwable $previous = null, $failedValue = null)
@@ -35,19 +62,28 @@ class JsonException extends \InvalidArgumentException
         $this->setFailedValue($failedValue);
     }
 
+    /**
+     * Sets the value that failed to parse or encode so it can be analyzed later.
+     *
+     * @param $failedValue
+     *   The value that failed to parse or encode correctly.
+     * @return JsonException
+     *   The invoked object.
+     */
     public function setFailedValue($failedValue) : self
     {
         $this->failedValue = $failedValue;
         return $this;
     }
 
+    /**
+     * Returns the value that failed to parse or encode properly.
+     *
+     * @return mixed
+     *   The value that failed to process.
+     */
     public function getFailedValue()
     {
         return $this->failedValue;
-    }
-
-    public static function fromJsonError(int $jsonError, $failedValue): self
-    {
-        return new static(static::getExceptionMessage($jsonError), $jsonError, null, $failedValue);
     }
 }
