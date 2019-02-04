@@ -18,7 +18,7 @@ class JsonEncodeExceptionTest extends TestCase
         $this->assertSame('', $exception->getMessage());
         $this->assertSame(0, $exception->getCode());
         $this->assertNull($exception->getPrevious());
-        $this->assertNull($exception->getJson());
+        $this->assertNull($exception->getFailedValue());
     }
 
     public function testConstructor(): void
@@ -34,7 +34,7 @@ class JsonEncodeExceptionTest extends TestCase
         $this->assertSame('title', $exception->getMessage());
         $this->assertSame(2, $exception->getCode());
         $this->assertSame($previous, $exception->getPrevious());
-        $this->assertSame('json', $exception->getJson());
+        $this->assertSame('json', $exception->getFailedValue());
     }
 
     public function testWithJsonObject(): void
@@ -52,7 +52,7 @@ class JsonEncodeExceptionTest extends TestCase
         $this->assertSame('title', $exception->getMessage());
         $this->assertSame(2, $exception->getCode());
         $this->assertSame($previous, $exception->getPrevious());
-        $this->assertSame($json, $exception->getJson());
+        $this->assertSame($json, $exception->getFailedValue());
     }
 
     public function testFromJsonError(): void
@@ -62,6 +62,6 @@ class JsonEncodeExceptionTest extends TestCase
 
         $this->assertSame('Syntax error, malformed JSON', $exception->getMessage());
         $this->assertSame(\JSON_ERROR_SYNTAX, $exception->getCode());
-        $this->assertSame($json, $exception->getJson());
+        $this->assertSame($json, $exception->getFailedValue());
     }
 }

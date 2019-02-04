@@ -39,7 +39,7 @@ class JsonParseExceptionTest extends TestCase
             ApiProblem::fromJson($json);
         }
         catch (JsonParseException $e) {
-            $this->assertEquals($json, $e->getJson());
+            $this->assertEquals($json, $e->getFailedValue());
         }
     }
 
@@ -50,7 +50,7 @@ class JsonParseExceptionTest extends TestCase
         $this->assertSame('', $exception->getMessage());
         $this->assertSame(0, $exception->getCode());
         $this->assertNull($exception->getPrevious());
-        $this->assertSame('', $exception->getJson());
+        $this->assertSame('', $exception->getFailedValue());
     }
 
     public function testConstructor(): void
@@ -66,7 +66,7 @@ class JsonParseExceptionTest extends TestCase
         $this->assertSame('title', $exception->getMessage());
         $this->assertSame(2, $exception->getCode());
         $this->assertSame($previous, $exception->getPrevious());
-        $this->assertSame('json', $exception->getJson());
+        $this->assertSame('json', $exception->getFailedValue());
     }
 
     public function testFromJsonError(): void
@@ -76,6 +76,6 @@ class JsonParseExceptionTest extends TestCase
 
         $this->assertSame('Syntax error, malformed JSON', $exception->getMessage());
         $this->assertSame(\JSON_ERROR_SYNTAX, $exception->getCode());
-        $this->assertSame($json, $exception->getJson());
+        $this->assertSame($json, $exception->getFailedValue());
     }
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Crell\ApiProblem;
 
-abstract class AbstractJsonException extends \InvalidArgumentException
+class JsonException extends \InvalidArgumentException
 {
     protected const EXCEPTION_MESSAGES = [
         \JSON_ERROR_DEPTH => 'Maximum stack depth exceeded',
@@ -19,8 +19,35 @@ abstract class AbstractJsonException extends \InvalidArgumentException
         \JSON_ERROR_UTF16 => 'Malformed UTF-16 characters, possibly incorrectly encoded',
     ];
 
+    /**
+     * @var mixed
+     */
+    protected $failedValue;
+
     protected static function getExceptionMessage(int $jsonError): string
     {
         return self::EXCEPTION_MESSAGES[$jsonError] ?? 'Unknown error';
+    }
+
+    public function __construct(string $message = '', int $code = 0, \Throwable $previous = null, $failedValue = null)
+    {
+        parent::__construct($message, $code, $previous);
+        $this->setFailedValue($failedValue);
+    }
+
+    public function setFailedValue($failedValue) : self
+    {
+        $this->failedValue = $failedValue;
+        return $this;
+    }
+
+    public function getFailedValue()
+    {
+        return $this->failedValue;
+    }
+
+    public static function fromJsonError(int $jsonError, $failedValue): self
+    {
+        return new static(static::getExceptionMessage($jsonError), $jsonError, null, $failedValue);
     }
 }
