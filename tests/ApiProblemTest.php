@@ -62,15 +62,9 @@ class ApiProblemTest extends TestCase
         $problem = new ApiProblem(\hex2bin('58efa99d4e19ff4e93efd93f7afb10a5'), 'URI');
 
         $json = $problem->asJson();
+
+        // This line should throw an exception.
         $result = json_decode($json, true);
-
-        $this->assertArrayHasKey('title', $result);
-        $this->assertEquals('Title', $result['title']);
-        $this->assertArrayHasKey('type', $result);
-        $this->assertEquals('URI', $result['type']);
-
-        // Ensure that empty properties are not included.
-        $this->assertArrayNotHasKey('detail', $result);
     }
 
     public function testSimpleJsonCompile() : void
