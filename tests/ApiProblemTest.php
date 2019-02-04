@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=0);
+declare(strict_types=1);
 
 namespace Crell\ApiProblem;
 
@@ -19,6 +19,16 @@ class ApiProblemTest extends TestCase
         $problem = new ApiProblem('Title', 'URI');
         $this->assertEquals("Title", $problem->getTitle());
         $this->assertEquals("URI", $problem->getType());
+    }
+
+    public function testConstructorWithDefaults() : void
+    {
+        $problem = new ApiProblem();
+        $this->assertSame('', $problem->getTitle());
+        $this->assertSame('about:blank', $problem->getType());
+        $this->assertSame('', $problem->getDetail());
+        $this->assertSame('', $problem->getInstance());
+        $this->assertSame('', $problem->getTitle());
     }
 
     public function testSimpleExtraProperty() : void
@@ -40,6 +50,21 @@ class ApiProblemTest extends TestCase
         $problem['irken']['invader'] = 'Zim';
         $this->assertTrue(isset($problem['irken']['invader']));
         $this->assertEquals('Zim', $problem['irken']['invader']);
+    }
+
+    public function testSimpleJsonCompileWithJsonException() : void
+    {
+        $this->expectException(JsonEncodeException::class);
+        $this->expectExceptionCode(\JSON_ERROR_UTF8);
+        $this->expectExceptionMessage('Malformed UTF-8 characters, possibly incorrectly encoded');
+
+        // an invalid string value
+        $problem = new ApiProblem(\hex2bin('58efa99d4e19ff4e93efd93f7afb10a5'), 'URI');
+
+        $json = $problem->asJson();
+
+        // This line should throw an exception.
+        $result = json_decode($json, true);
     }
 
     public function testSimpleJsonCompile() : void
@@ -137,6 +162,24 @@ class ApiProblemTest extends TestCase
         foreach ($invader as $node) {
             $this->assertEquals('Zim', $node);
         }
+    }
+
+    public function testParseJsonWithEmptyString() : void
+    {
+        $this->expectException(JsonParseException::class);
+        $this->expectExceptionCode(\JSON_ERROR_SYNTAX);
+        $this->expectExceptionMessage('An empty string is not a valid JSON value');
+
+        ApiProblem::fromJson('');
+    }
+
+    public function testParseJsonWithInvalidString() : void
+    {
+        $this->expectException(JsonParseException::class);
+        $this->expectExceptionCode(\JSON_ERROR_SYNTAX);
+        $this->expectExceptionMessage('Syntax error, malformed JSON');
+
+        ApiProblem::fromJson(\hex2bin('58efa99d4e19ff4e93efd93f7afb10a5'));
     }
 
     public function testParseJson() : void

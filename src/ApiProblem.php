@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=0);
+declare(strict_types=1);
 
 namespace Crell\ApiProblem;
 
@@ -35,7 +35,7 @@ class ApiProblem implements \ArrayAccess
      *
      * @var string
      */
-    const CONTENT_TYPE_JSON = 'application/problem+json';
+    public const CONTENT_TYPE_JSON = 'application/problem+json';
 
     /**
      * The content type for a XML based HTTP response carrying
@@ -43,7 +43,7 @@ class ApiProblem implements \ArrayAccess
      *
      * @var string
      */
-    const CONTENT_TYPE_XML = 'application/problem+xml';
+    public const CONTENT_TYPE_XML = 'application/problem+xml';
 
     /**
      *  A short, human-readable summary of the problem type.
@@ -86,7 +86,7 @@ class ApiProblem implements \ArrayAccess
      *
      * @var int
      */
-    protected $status;
+    protected $status = 0;
 
     /**
      * An human readable explanation specific to this occurrence of the problem.
@@ -99,7 +99,7 @@ class ApiProblem implements \ArrayAccess
      *
      * @var string
      */
-    protected $detail;
+    protected $detail = '';
 
     /**
      * A URI reference that identifies the specific occurrence of the problem.
@@ -113,7 +113,7 @@ class ApiProblem implements \ArrayAccess
      *
      * @var string
      */
-    protected $instance;
+    protected $instance = '';
 
     /**
      * Any arbitrary extension properties that have been assigned on this object.
@@ -136,33 +136,17 @@ class ApiProblem implements \ArrayAccess
     public static function fromJson(string $json) : self
     {
         if (empty($json)) {
-            throw (new JsonParseException('An empty string is not a valid JSON value', JSON_ERROR_SYNTAX))->setJson($json);
+            throw new JsonParseException('An empty string is not a valid JSON value', JSON_ERROR_SYNTAX, null, $json);
         }
         $parsed = json_decode($json, true);
 
-        switch (json_last_error()) {
-            case JSON_ERROR_NONE:
-                return static::decompile($parsed);
-                break;
-            case JSON_ERROR_DEPTH:
-                throw (new JsonParseException('Maximum stack depth exceeded', JSON_ERROR_DEPTH))->setJson($json);
-                break;
-            case JSON_ERROR_STATE_MISMATCH:
-                throw (new JsonParseException('Underflow or the modes mismatch', JSON_ERROR_STATE_MISMATCH))->setJson($json);
-                break;
-            case JSON_ERROR_CTRL_CHAR:
-                throw (new JsonParseException('Unexpected control character found', JSON_ERROR_CTRL_CHAR))->setJson($json);
-                break;
-            case JSON_ERROR_SYNTAX:
-                throw (new JsonParseException('Syntax error, malformed JSON', JSON_ERROR_SYNTAX))->setJson($json);
-                break;
-            case JSON_ERROR_UTF8:
-                throw (new JsonParseException('Malformed UTF-8 characters, possibly incorrectly encoded', JSON_ERROR_UTF8))->setJson($json);
-                break;
-            default:
-                throw (new JsonParseException('Unknown error'))->setJson($json);
-                break;
+        $lastError = json_last_error();
+
+        if (\JSON_ERROR_NONE !== $lastError) {
+            throw JsonParseException::fromJsonError($lastError, $json);
         }
+
+        return static::decompile($parsed);
     }
 
     /**
@@ -222,7 +206,7 @@ class ApiProblem implements \ArrayAccess
             $problem->setType($parsed['type']);
         }
         if (!empty($parsed['status'])) {
-            $problem->setStatus($parsed['status']);
+            $problem->setStatus((int) $parsed['status']);
         }
         if (!empty($parsed['detail'])) {
             $problem->setDetail($parsed['detail']);
@@ -256,12 +240,8 @@ class ApiProblem implements \ArrayAccess
      */
     public function __construct(string $title = '', string $type = 'about:blank')
     {
-        if ($title) {
-            $this->title = $title;
-        }
-        if ($type) {
-            $this->type = $type;
-        }
+        $this->title = $title;
+        $this->type = $type;
     }
 
     /**
@@ -374,7 +354,7 @@ class ApiProblem implements \ArrayAccess
      */
     public function getStatus() : int
     {
-        return $this->status ?: 0;
+        return $this->status;
     }
 
     /**
@@ -402,16 +382,22 @@ class ApiProblem implements \ArrayAccess
      * @return string
      *   A JSON string representing this problem.
      */
-    public function asJson(bool $pretty = false)
+    public function asJson(bool $pretty = false): string
     {
         $response = $this->compile();
 
         $options = 0;
         if ($pretty) {
-            $options = JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT;
+            $options = \JSON_UNESCAPED_SLASHES | \JSON_PRETTY_PRINT;
         }
 
-        return json_encode($response, $options);
+        $json = json_encode($response, $options);
+
+        if (false === $json) {
+            throw JsonEncodeException::fromJsonError(\json_last_error(), $response);
+        }
+
+        return $json;
     }
 
     /**
@@ -507,9 +493,9 @@ class ApiProblem implements \ArrayAccess
                     } elseif ($key === 'value') {
                         $element->{0} = $value;
                     } elseif (is_bool($value)) {
-                        $element->addChild($key, intval($value));
+                        $element->addChild($key, (int) $value);
                     } else {
-                        $element->addChild($key, htmlspecialchars($value, ENT_QUOTES));
+                        $element->addChild($key, htmlspecialchars((string) $value, ENT_QUOTES));
                     }
                 } else {
                     $element->addChild($parent, htmlspecialchars($value, ENT_QUOTES));

@@ -1,25 +1,20 @@
 <?php
 
-declare(strict_types=0);
+declare(strict_types=1);
 
 namespace Crell\ApiProblem;
 
-
-class JsonParseException extends \InvalidArgumentException
+class JsonParseException extends JsonException
 {
     /**
-     * @var string
+     * JsonParseException constructor.
+     *
+     * This version forces a string for $failedValue, as that's the only thing that
+     * could fail to parse, since that's all you can even try to parse.
      */
-    protected $json;
-
-    public function setJson(string $json) : self
+    public function __construct(string $message = '', int $code = 0, \Throwable $previous = null, string $failedValue = '')
     {
-        $this->json = $json;
-        return $this;
-    }
-
-    public function getJson() : string
-    {
-        return $this->json;
+        parent::__construct($message, $code, $previous);
+        $this->setFailedValue($failedValue);
     }
 }
