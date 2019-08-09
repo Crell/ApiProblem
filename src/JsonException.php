@@ -46,7 +46,7 @@ class JsonException extends \InvalidArgumentException
      *
      * @param int $jsonError
      *   the JSON error code.
-     * @param $failedValue
+     * @param mixed $failedValue
      *   The value that failed to parse or encode.
      * @return JsonException
      *   A new exception object.
@@ -65,7 +65,7 @@ class JsonException extends \InvalidArgumentException
     /**
      * Sets the value that failed to parse or encode so it can be analyzed later.
      *
-     * @param $failedValue
+     * @param mixed $failedValue
      *   The value that failed to parse or encode correctly.
      * @return JsonException
      *   The invoked object.

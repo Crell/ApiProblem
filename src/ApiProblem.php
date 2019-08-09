@@ -414,6 +414,7 @@ class ApiProblem implements \ArrayAccess
 
         $this->arrayToXml($this->compile(), $doc);
 
+        /** @var \DOMElement */
         $dom = dom_import_simplexml($doc);
         if ($pretty) {
             $dom->ownerDocument->preserveWhiteSpace = false;
@@ -466,12 +467,12 @@ class ApiProblem implements \ArrayAccess
      *
      * @param array $data
      *   The data to add to the element.
-     * @param \SimpleXmlElement $element
+     * @param \SimpleXMLElement $element
      *   The XML object to which to add data.
      * @param mixed $parent
      *   Used for internal recursion only.
      */
-    protected function arrayToXml(array $data, \SimpleXmlElement $element, $parent = null)
+    protected function arrayToXml(array $data, \SimpleXMLElement $element, $parent = null)
     {
         foreach ($data as $key => $value) {
             if (is_array($value)) {
@@ -493,7 +494,7 @@ class ApiProblem implements \ArrayAccess
                     } elseif ($key === 'value') {
                         $element->{0} = $value;
                     } elseif (is_bool($value)) {
-                        $element->addChild($key, (int) $value);
+                        $element->addChild($key, strval($value));
                     } else {
                         $element->addChild($key, htmlspecialchars((string) $value, ENT_QUOTES));
                     }
