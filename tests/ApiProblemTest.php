@@ -99,6 +99,22 @@ class ApiProblemTest extends TestCase
         $this->assertEquals('Zim', $result['irken']['invader']);
     }
 
+    public function testSimpleJsonEncode() : void
+    {
+        $problem = new ApiProblem('Title', 'URI');
+
+        $json = json_encode($problem);
+        $result = json_decode($json, true);
+
+        $this->assertArrayHasKey('title', $result);
+        $this->assertEquals('Title', $result['title']);
+        $this->assertArrayHasKey('type', $result);
+        $this->assertEquals('URI', $result['type']);
+
+        // Ensure that empty properties are not included.
+        $this->assertArrayNotHasKey('detail', $result);
+    }
+
     /**
      * Confirms that the title property is optional.
      *

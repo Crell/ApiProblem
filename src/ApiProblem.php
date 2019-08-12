@@ -26,7 +26,7 @@ namespace Crell\ApiProblem;
  *
  * @autor Larry Garfield
  */
-class ApiProblem implements \ArrayAccess
+class ApiProblem implements \ArrayAccess, \JsonSerializable
 {
 
     /**
@@ -431,8 +431,20 @@ class ApiProblem implements \ArrayAccess
      *
      * @return array
      *   The API problem represented as an array.
-    */
+     */
     public function asArray() : array
+    {
+        return $this->compile();
+    }
+
+    /**
+     * Supports rendering this problem as a JSON using the
+     * json_encode() function.
+     *
+     * @return array
+     *   The API problem represented as an array for rendering.
+     */
+    public function jsonSerialize()
     {
         return $this->compile();
     }
