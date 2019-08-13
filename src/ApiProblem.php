@@ -438,8 +438,7 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
     }
 
     /**
-     * Supports rendering this problem as a JSON using the
-     * json_encode() function.
+     * Supports rendering this problem as a JSON using the json_encode() function.
      *
      * @return array
      *   The API problem represented as an array for rendering.
