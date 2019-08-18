@@ -34,6 +34,15 @@ $json_string = $problem->asJson();
 
 Or, even better, you can subclass ApiProblem for a specific problem type (since the type and title are supposed to go together and be relatively fixed), then just populate your own error-specific data.  Just like extending an exception!
 
+If you're using a library or framework that wants to do its own JSON serialization, that's also fully supported.  ApiProblem implements`\JsonSerializable`, so you can pass it directly to `json_encode()` as if it were a naked array.
+
+```php
+$response = new MyFrameworksJsonResponse($problem);
+
+// Or do it yourself
+$body = json_encode($problem);
+```
+
 ## Sending Responses
 
 You're probably using [PSR-7][3] for your responses. That's why this library includes a utility to convert your `ApiProblem` object to a PSR-7 `ResponseInterface` object, using a [PSR-17][4] factory of your choice.  Like so:
