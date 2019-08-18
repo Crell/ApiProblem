@@ -52,7 +52,7 @@ use Crell\ApiProblem\HttpConverter;
 
 $factory = getResponseFactoryFromSomewhere();
 
-// The second paramter says whether to pretty-print the output.
+// The second parameter says whether to pretty-print the output.
 $converter = new HttpConverter($factory, true);
 
 $response = $converter->toJsonResponse($problem);
