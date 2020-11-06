@@ -257,5 +257,31 @@ class ApiProblemTest extends TestCase
         $json = $problem->asJson(true);
         $this->assertTrue(strpos($json, '  ') !== FALSE);
     }
+
+    public function testParseFromArrayWithEmptyArray() : void
+    {
+        $problem = new ApiProblem();
+        $problemFromArray = ApiProblem::fromArray([]);
+
+        $this->assertEquals($problem, $problemFromArray);
+    }
+
+    public function testParseFromArray() : void
+    {
+        $problem = new ApiProblem('Title', 'URI');
+        $problem->setStatus(403);
+        $problem['sir'] = 'Gir';
+        $problem['irken']['invader'] = 'Zim';
+
+        $newProblem = ApiProblem::fromArray($problem->asArray());
+
+        $this->assertEquals($problem['sir'], $newProblem['sir']);
+        $this->assertEquals($problem->getTitle(), $newProblem->getTitle());
+        $this->assertEquals($problem->getType(), $newProblem->getType());
+        $this->assertEquals($problem->getStatus(), $newProblem->getStatus());
+        $this->assertEquals($problem->getDetail(), $newProblem->getDetail());
+        $this->assertEquals($problem->getInstance(), $newProblem->getInstance());
+        $this->assertEquals($problem['irken']['invader'], $newProblem['irken']['invader']);
+    }
 }
 

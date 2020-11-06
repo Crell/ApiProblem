@@ -186,6 +186,15 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
         return static::decompile($data);
     }
 
+    public static function fromArray(array $input) : self
+    {
+        $defaultInput = ['title' => null, 'type' => null, 'status' => null, 'detail' => null, 'instance' => null];
+
+        $data = $input + $defaultInput;
+
+        return self::decompile($data);
+    }
+
     /**
      * Decompiles an array into an ApiProblem object.
      *
