@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Crell\ApiProblem;
 
 use PHPUnit\Framework\TestCase;
+use const JSON_ERROR_SYNTAX;
 
 /**
  * Test for the JSON error handling.
@@ -17,11 +18,12 @@ class JsonParseExceptionTest extends TestCase
 
     /**
      * @coversNothing
-     * @expectedException \Crell\ApiProblem\JsonParseException
-     * @expectedExceptionCode JSON_ERROR_SYNTAX
      */
     public function testMalformedJson() : void
     {
+        $this->expectException(JsonParseException::class);
+        $this->expectExceptionCode(JSON_ERROR_SYNTAX);
+
         // Note the stray comma.
         $json = '{"a": "b",}';
         ApiProblem::fromJson($json);
