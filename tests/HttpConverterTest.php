@@ -7,7 +7,7 @@ namespace Crell\ApiProblem;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
-use Zend\Diactoros\Response;
+use Laminas\Diactoros\Response;
 
 class HttpConverterTest extends TestCase
 {
