@@ -33,15 +33,15 @@ class HttpConverterTest extends TestCase
         $converter = new HttpConverter($this->getMockResponseFactory());
         $response = $converter->toJsonResponse($problem);
 
-        $this->assertEquals(404, $response->getStatusCode());
-        $this->assertEquals('application/problem+json', $response->getHeaderLine('Content-Type'));
+        self::assertEquals(404, $response->getStatusCode());
+        self::assertEquals('application/problem+json', $response->getHeaderLine('Content-Type'));
         $returned_problem = ApiProblem::fromJson($response->getBody()->getContents());
 
-        $this->assertEquals('Title', $returned_problem->getTitle());
-        $this->assertEquals('URI', $returned_problem->getType());
-        $this->assertEquals(404, $returned_problem->getStatus());
-        $this->assertEquals('Gir', $returned_problem['sir']);
-        $this->assertEquals('Zim', $returned_problem['irken']['invader']);
+        self::assertEquals('Title', $returned_problem->getTitle());
+        self::assertEquals('URI', $returned_problem->getType());
+        self::assertEquals(404, $returned_problem->getStatus());
+        self::assertEquals('Gir', $returned_problem['sir']);
+        self::assertEquals('Zim', $returned_problem['irken']['invader']);
     }
 
     public function testToXml() : void
@@ -54,14 +54,14 @@ class HttpConverterTest extends TestCase
         $converter = new HttpConverter($this->getMockResponseFactory());
         $response = $converter->toXmlResponse($problem);
 
-        $this->assertEquals(404, $response->getStatusCode());
-        $this->assertEquals('application/problem+xml', $response->getHeaderLine('Content-Type'));
+        self::assertEquals(404, $response->getStatusCode());
+        self::assertEquals('application/problem+xml', $response->getHeaderLine('Content-Type'));
         $returned_problem = ApiProblem::fromXml($response->getBody()->getContents());
 
-        $this->assertEquals('Title', $returned_problem->getTitle());
-        $this->assertEquals('URI', $returned_problem->getType());
-        $this->assertEquals(404, $returned_problem->getStatus());
-        $this->assertEquals('Gir', $returned_problem['sir']);
-        $this->assertEquals('Zim', $returned_problem['irken']['invader']);
+        self::assertEquals('Title', $returned_problem->getTitle());
+        self::assertEquals('URI', $returned_problem->getType());
+        self::assertEquals(404, $returned_problem->getStatus());
+        self::assertEquals('Gir', $returned_problem['sir']);
+        self::assertEquals('Zim', $returned_problem['irken']['invader']);
     }
 }

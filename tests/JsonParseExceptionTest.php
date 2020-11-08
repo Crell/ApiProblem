@@ -41,7 +41,7 @@ class JsonParseExceptionTest extends TestCase
             ApiProblem::fromJson($json);
         }
         catch (JsonParseException $e) {
-            $this->assertEquals($json, $e->getFailedValue());
+            self::assertEquals($json, $e->getFailedValue());
         }
     }
 
@@ -49,10 +49,10 @@ class JsonParseExceptionTest extends TestCase
     {
         $exception = new JsonParseException();
 
-        $this->assertSame('', $exception->getMessage());
-        $this->assertSame(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
-        $this->assertSame('', $exception->getFailedValue());
+        self::assertSame('', $exception->getMessage());
+        self::assertSame(0, $exception->getCode());
+        self::assertNull($exception->getPrevious());
+        self::assertSame('', $exception->getFailedValue());
     }
 
     public function testConstructor(): void
@@ -65,10 +65,10 @@ class JsonParseExceptionTest extends TestCase
             'json'
         );
 
-        $this->assertSame('title', $exception->getMessage());
-        $this->assertSame(2, $exception->getCode());
-        $this->assertSame($previous, $exception->getPrevious());
-        $this->assertSame('json', $exception->getFailedValue());
+        self::assertSame('title', $exception->getMessage());
+        self::assertSame(2, $exception->getCode());
+        self::assertSame($previous, $exception->getPrevious());
+        self::assertSame('json', $exception->getFailedValue());
     }
 
     public function testFromJsonError(): void
@@ -76,8 +76,8 @@ class JsonParseExceptionTest extends TestCase
         $json = 'foo';
         $exception = JsonParseException::fromJsonError(\JSON_ERROR_SYNTAX, $json);
 
-        $this->assertSame('Syntax error, malformed JSON', $exception->getMessage());
-        $this->assertSame(\JSON_ERROR_SYNTAX, $exception->getCode());
-        $this->assertSame($json, $exception->getFailedValue());
+        self::assertSame('Syntax error, malformed JSON', $exception->getMessage());
+        self::assertSame(\JSON_ERROR_SYNTAX, $exception->getCode());
+        self::assertSame($json, $exception->getFailedValue());
     }
 }

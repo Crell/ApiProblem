@@ -95,8 +95,6 @@ class HttpConverter
     {
         $status = $problem->getStatus() ?: 500;
 
-        $response = $this->responseFactory->createResponse($status);
-
-        return $response;
+        return $this->responseFactory->createResponse($status);
     }
 }

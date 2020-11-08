@@ -17,18 +17,18 @@ class ApiProblemTest extends TestCase
     public function testConstructor() : void
     {
         $problem = new ApiProblem('Title', 'URI');
-        $this->assertEquals("Title", $problem->getTitle());
-        $this->assertEquals("URI", $problem->getType());
+        self::assertEquals("Title", $problem->getTitle());
+        self::assertEquals("URI", $problem->getType());
     }
 
     public function testConstructorWithDefaults() : void
     {
         $problem = new ApiProblem();
-        $this->assertSame('', $problem->getTitle());
-        $this->assertSame('about:blank', $problem->getType());
-        $this->assertSame('', $problem->getDetail());
-        $this->assertSame('', $problem->getInstance());
-        $this->assertSame('', $problem->getTitle());
+        self::assertSame('', $problem->getTitle());
+        self::assertSame('about:blank', $problem->getType());
+        self::assertSame('', $problem->getDetail());
+        self::assertSame('', $problem->getInstance());
+        self::assertSame('', $problem->getTitle());
     }
 
     public function testSimpleExtraProperty() : void
@@ -36,11 +36,11 @@ class ApiProblemTest extends TestCase
         $problem = new ApiProblem('Title', 'URI');
 
         $problem['sir'] = 'Gir';
-        $this->assertEquals('Gir', $problem['sir']);
+        self::assertEquals('Gir', $problem['sir']);
 
         unset($problem['sir']);
-        $this->assertFalse(isset($problem['sir']));
-        $this->assertNull($problem['sir']);
+        self::assertFalse(isset($problem['sir']));
+        self::assertNull($problem['sir']);
     }
 
     public function testComplexExtraProperty() : void
@@ -48,15 +48,15 @@ class ApiProblemTest extends TestCase
         $problem = new ApiProblem('Title', 'URI');
 
         $problem['irken']['invader'] = 'Zim';
-        $this->assertTrue(isset($problem['irken']['invader']));
-        $this->assertEquals('Zim', $problem['irken']['invader']);
+        self::assertTrue(isset($problem['irken']['invader']));
+        self::assertEquals('Zim', $problem['irken']['invader']);
     }
 
     public function testSimpleJsonCompileWithJsonException() : void
     {
-        $this->expectException(JsonEncodeException::class);
-        $this->expectExceptionCode(\JSON_ERROR_UTF8);
-        $this->expectExceptionMessage('Malformed UTF-8 characters, possibly incorrectly encoded');
+        self::expectException(JsonEncodeException::class);
+        self::expectExceptionCode(\JSON_ERROR_UTF8);
+        self::expectExceptionMessage('Malformed UTF-8 characters, possibly incorrectly encoded');
 
         // an invalid string value
         $problem = new ApiProblem(\hex2bin('58efa99d4e19ff4e93efd93f7afb10a5'), 'URI');
@@ -74,13 +74,13 @@ class ApiProblemTest extends TestCase
         $json = $problem->asJson();
         $result = json_decode($json, true);
 
-        $this->assertArrayHasKey('title', $result);
-        $this->assertEquals('Title', $result['title']);
-        $this->assertArrayHasKey('type', $result);
-        $this->assertEquals('URI', $result['type']);
+        self::assertArrayHasKey('title', $result);
+        self::assertEquals('Title', $result['title']);
+        self::assertArrayHasKey('type', $result);
+        self::assertEquals('URI', $result['type']);
 
         // Ensure that empty properties are not included.
-        $this->assertArrayNotHasKey('detail', $result);
+        self::assertArrayNotHasKey('detail', $result);
     }
 
     public function testExtraPropertyJsonCompile() : void
@@ -92,11 +92,11 @@ class ApiProblemTest extends TestCase
         $json = $problem->asJson();
         $result = json_decode($json, true);
 
-        $this->assertArrayHasKey('sir', $result);
-        $this->assertEquals('Gir', $result['sir']);
-        $this->assertArrayHasKey('irken', $result);
-        $this->assertArrayHasKey('invader', $result['irken']);
-        $this->assertEquals('Zim', $result['irken']['invader']);
+        self::assertArrayHasKey('sir', $result);
+        self::assertEquals('Gir', $result['sir']);
+        self::assertArrayHasKey('irken', $result);
+        self::assertArrayHasKey('invader', $result['irken']);
+        self::assertEquals('Zim', $result['irken']['invader']);
     }
 
     public function testSimpleJsonEncode() : void
@@ -106,13 +106,13 @@ class ApiProblemTest extends TestCase
         $json = json_encode($problem);
         $result = json_decode($json, true);
 
-        $this->assertArrayHasKey('title', $result);
-        $this->assertEquals('Title', $result['title']);
-        $this->assertArrayHasKey('type', $result);
-        $this->assertEquals('URI', $result['type']);
+        self::assertArrayHasKey('title', $result);
+        self::assertEquals('Title', $result['title']);
+        self::assertArrayHasKey('type', $result);
+        self::assertEquals('URI', $result['type']);
 
         // Ensure that empty properties are not included.
-        $this->assertArrayNotHasKey('detail', $result);
+        self::assertArrayNotHasKey('detail', $result);
     }
 
     /**
@@ -135,7 +135,7 @@ class ApiProblemTest extends TestCase
         $problem = new ApiProblem('Title');
         $json = $problem->asJson();
         $result = json_decode($json, true);
-        $this->assertEquals('about:blank', $result['type']);
+        self::assertEquals('about:blank', $result['type']);
     }
 
     public function testSimpleXmlCompile() : void
@@ -145,12 +145,12 @@ class ApiProblemTest extends TestCase
         $xml = $problem->asXml();
         $result = simplexml_load_string($xml);
 
-        $this->assertEquals('problem', $result->getName());
+        self::assertEquals('problem', $result->getName());
         $dom = dom_import_simplexml($result);
 
         $titles = $dom->getElementsByTagName('title');
-        $this->assertEquals(1, $titles->length);
-        $this->assertEquals('Title', $titles->item(0)->textContent);
+        self::assertEquals(1, $titles->length);
+        self::assertEquals('Title', $titles->item(0)->textContent);
     }
 
     public function testExtraPropertyXmlCompile() : void
@@ -162,38 +162,38 @@ class ApiProblemTest extends TestCase
         $xml = $problem->asXml(true);
         $result = simplexml_load_string($xml);
 
-        $this->assertEquals('problem', $result->getName());
+        self::assertEquals('problem', $result->getName());
         $dom = dom_import_simplexml($result);
 
         $titles = $dom->getElementsByTagName('title');
-        $this->assertEquals(1, $titles->length);
-        $this->assertEquals('Title', $titles->item(0)->textContent);
+        self::assertEquals(1, $titles->length);
+        self::assertEquals('Title', $titles->item(0)->textContent);
 
         $sir = $dom->getElementsByTagName('sir');
-        $this->assertEquals(1, $sir->length);
-        $this->assertEquals('Gir', $sir->item(0)->textContent);
+        self::assertEquals(1, $sir->length);
+        self::assertEquals('Gir', $sir->item(0)->textContent);
 
         $invader = $result->xpath('/problem/irken/invader');
-        $this->assertCount(1, $invader);
+        self::assertCount(1, $invader);
         foreach ($invader as $node) {
-            $this->assertEquals('Zim', $node);
+            self::assertEquals('Zim', $node);
         }
     }
 
     public function testParseJsonWithEmptyString() : void
     {
-        $this->expectException(JsonParseException::class);
-        $this->expectExceptionCode(\JSON_ERROR_SYNTAX);
-        $this->expectExceptionMessage('An empty string is not a valid JSON value');
+        self::expectException(JsonParseException::class);
+        self::expectExceptionCode(\JSON_ERROR_SYNTAX);
+        self::expectExceptionMessage('An empty string is not a valid JSON value');
 
         ApiProblem::fromJson('');
     }
 
     public function testParseJsonWithInvalidString() : void
     {
-        $this->expectException(JsonParseException::class);
-        $this->expectExceptionCode(\JSON_ERROR_SYNTAX);
-        $this->expectExceptionMessage('Syntax error, malformed JSON');
+        self::expectException(JsonParseException::class);
+        self::expectExceptionCode(\JSON_ERROR_SYNTAX);
+        self::expectExceptionMessage('Syntax error, malformed JSON');
 
         ApiProblem::fromJson(\hex2bin('58efa99d4e19ff4e93efd93f7afb10a5'));
     }
@@ -209,12 +209,12 @@ class ApiProblemTest extends TestCase
 
         $result = ApiProblem::fromJson($problem->asJson());
 
-        $this->assertEquals('Title', $result->getTitle());
-        $this->assertEquals('Instance', $result->getInstance());
-        $this->assertEquals('Detail', $result->getDetail());
-        $this->assertEquals(403, $result->getStatus());
-        $this->assertEquals('Gir', $result['sir']);
-        $this->assertEquals('Zim', $result['irken']['invader']);
+        self::assertEquals('Title', $result->getTitle());
+        self::assertEquals('Instance', $result->getInstance());
+        self::assertEquals('Detail', $result->getDetail());
+        self::assertEquals(403, $result->getStatus());
+        self::assertEquals('Gir', $result['sir']);
+        self::assertEquals('Zim', $result['irken']['invader']);
     }
 
     public function testParseXml() : void
@@ -226,10 +226,10 @@ class ApiProblemTest extends TestCase
 
         $result = ApiProblem::fromXml($problem->asXml());
 
-        $this->assertEquals('Title', $result->getTitle());
-        $this->assertEquals(403, $result->getStatus());
-        $this->assertEquals('Gir', $result['sir']);
-        $this->assertEquals('Zim', $result['irken']['invader']);
+        self::assertEquals('Title', $result->getTitle());
+        self::assertEquals(403, $result->getStatus());
+        self::assertEquals('Gir', $result['sir']);
+        self::assertEquals('Zim', $result['irken']['invader']);
     }
 
     public function testArray() : void
@@ -240,11 +240,11 @@ class ApiProblemTest extends TestCase
         $problem['irken']['invader'] = 'Zim';
 
         $array = $problem->asArray();
-        $this->assertEquals('Gir', $array['sir']);
-        $this->assertEquals(403, $array['status']);
-        $this->assertEquals('Title', $array['title']);
-        $this->assertEquals('URI', $array['type']);
-        $this->assertEquals('Zim', $array['irken']['invader']);
+        self::assertEquals('Gir', $array['sir']);
+        self::assertEquals(403, $array['status']);
+        self::assertEquals('Title', $array['title']);
+        self::assertEquals('URI', $array['type']);
+        self::assertEquals('Zim', $array['irken']['invader']);
     }
 
     public function testPrettyPrintJson() : void
@@ -255,7 +255,7 @@ class ApiProblemTest extends TestCase
         $problem['irken']['invader'] = 'Zim';
 
         $json = $problem->asJson(true);
-        $this->assertTrue(strpos($json, '  ') !== FALSE);
+        self::assertTrue(strpos($json, '  ') !== FALSE);
     }
 
     public function testParseFromArrayWithEmptyArray() : void
@@ -263,7 +263,7 @@ class ApiProblemTest extends TestCase
         $problem = new ApiProblem();
         $problemFromArray = ApiProblem::fromArray([]);
 
-        $this->assertEquals($problem, $problemFromArray);
+        self::assertEquals($problem, $problemFromArray);
     }
 
     public function testParseFromArray() : void
@@ -275,13 +275,13 @@ class ApiProblemTest extends TestCase
 
         $newProblem = ApiProblem::fromArray($problem->asArray());
 
-        $this->assertEquals($problem['sir'], $newProblem['sir']);
-        $this->assertEquals($problem->getTitle(), $newProblem->getTitle());
-        $this->assertEquals($problem->getType(), $newProblem->getType());
-        $this->assertEquals($problem->getStatus(), $newProblem->getStatus());
-        $this->assertEquals($problem->getDetail(), $newProblem->getDetail());
-        $this->assertEquals($problem->getInstance(), $newProblem->getInstance());
-        $this->assertEquals($problem['irken']['invader'], $newProblem['irken']['invader']);
+        self::assertEquals($problem['sir'], $newProblem['sir']);
+        self::assertEquals($problem->getTitle(), $newProblem->getTitle());
+        self::assertEquals($problem->getType(), $newProblem->getType());
+        self::assertEquals($problem->getStatus(), $newProblem->getStatus());
+        self::assertEquals($problem->getDetail(), $newProblem->getDetail());
+        self::assertEquals($problem->getInstance(), $newProblem->getInstance());
+        self::assertEquals($problem['irken']['invader'], $newProblem['irken']['invader']);
     }
 }
 
