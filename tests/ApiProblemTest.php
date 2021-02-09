@@ -283,5 +283,34 @@ class ApiProblemTest extends TestCase
         self::assertEquals($problem->getInstance(), $newProblem->getInstance());
         self::assertEquals($problem['irken']['invader'], $newProblem['irken']['invader']);
     }
+
+    public function testFalsyFieldArePresentOnConversion(): void
+    {
+        $problem = new ApiProblem('0', '0');
+        $problem->setStatus(0);
+        $problem->setDetail('0');
+        $problem->setInstance('0');
+
+        $expected = [
+            "title"=> "0",
+            "type"=> "0",
+            "detail"=> "0",
+            "instance" => "0"
+        ];
+
+        self::assertSame($expected, $problem->asArray());
+    }
+
+    public function testStrictEmptyFieldAreRemovedOnConversion(): void
+    {
+        $problem = new ApiProblem('', '');
+        $problem->setStatus(0);
+        $problem->setDetail('');
+        $problem->setInstance('');
+
+        $expected = [];
+
+        self::assertSame($expected, $problem->asArray());
+    }
 }
 
