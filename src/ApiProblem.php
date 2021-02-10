@@ -478,15 +478,9 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
 
         // These properties are optional.
         foreach (['title', 'type', 'status', 'detail', 'instance'] as $key) {
-            if ('status' === $key && 0 === $this->$key) {
-                continue;
+            if (0 !== $this->$key && '' !== $this->$key) {
+                $response[$key] = $this->$key;
             }
-
-            if ('' === $this->$key) {
-                continue;
-            }
-
-            $response[$key] = $this->$key;
         }
 
         return $response;
