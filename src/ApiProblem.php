@@ -478,7 +478,10 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
 
         // These properties are optional.
         foreach (['title', 'type', 'status', 'detail', 'instance'] as $key) {
-            if (0 !== $this->$key && '' !== $this->$key) {
+            // Skip empty string or missing values, as they are optional.
+            // The string or integer 0, however, are allowed.  PHP makes
+            // this ugly.
+            if (isset($this->$key) && $this->$key !== 0 && $this->$key !== '') {
                 $response[$key] = $this->$key;
             }
         }
