@@ -312,5 +312,20 @@ class ApiProblemTest extends TestCase
 
         self::assertSame($expected, $problem->asArray());
     }
+
+    public function testJsonWithFalsyFieldsIsCorrectlyConverted(): void
+    {
+        $expected = [
+            "title"=> "0",
+            "type"=> "0",
+            "detail"=> "0",
+            "instance" => "0",
+        ];
+
+        /** @var string $input */
+        $input = json_encode($expected + ['status' => 0]);
+
+        self::assertSame($expected, ApiProblem::fromJson($input)->asArray());
+    }
 }
 

@@ -135,7 +135,7 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
      */
     public static function fromJson(string $json) : self
     {
-        if (empty($json)) {
+        if ($json === '') {
             throw new JsonParseException('An empty string is not a valid JSON value', JSON_ERROR_SYNTAX, null, $json);
         }
         $parsed = json_decode($json, true);
@@ -215,20 +215,26 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
     {
         $problem = new static();
 
-
-        if (!empty($parsed['title'])) {
+        if (isset($parsed['title']) && $parsed['title'] !== '') {
             $problem->setTitle($parsed['title']);
         }
-        if (!empty($parsed['type'])) {
+
+        if (isset($parsed['type']) && $parsed['type'] !== '') {
             $problem->setType($parsed['type']);
         }
-        if (!empty($parsed['status'])) {
-            $problem->setStatus((int) $parsed['status']);
+
+        if (isset($parsed['status'])) {
+            $status = (int) $parsed['status'];
+            if ($status !== 0) {
+                $problem->setStatus($status);
+            }
         }
-        if (!empty($parsed['detail'])) {
+
+        if (isset($parsed['detail']) && $parsed['detail'] !== '') {
             $problem->setDetail($parsed['detail']);
         }
-        if (!empty($parsed['instance'])) {
+
+        if (isset($parsed['instance']) && $parsed['instance'] !== '') {
             $problem->setInstance($parsed['instance']);
         }
 
