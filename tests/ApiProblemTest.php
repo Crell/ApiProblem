@@ -327,5 +327,22 @@ class ApiProblemTest extends TestCase
 
         self::assertSame($expected, ApiProblem::fromJson($input)->asArray());
     }
+
+    public function testXmlWithFalsyFieldsIsCorrectlyConverted(): void
+    {
+        $xml = '<?xml version="1.0"?>'."\n".'<problem><type>0</type><status>400</status></problem>'."\n";
+        $arr = ["type" => "0", "status" => 400];
+
+        self::assertSame($arr, ApiProblem::fromXml($xml)->asArray());
+        self::assertSame($xml, ApiProblem::fromArray($arr)->asXml());
+    }
+
+    public function testXmlWithEmptyTypeIsConvertedtoAboutBlank(): void
+    {
+        $xml = '<?xml version="1.0"?>'."\n".'<problem><type></type><status>23foobar</status></problem>'."\n";
+        $arr = ["type" => "about:blank"];
+
+        self::assertSame($arr, ApiProblem::fromXml($xml)->asArray());
+    }
 }
 

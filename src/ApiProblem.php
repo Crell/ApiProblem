@@ -215,26 +215,28 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
     {
         $problem = new static();
 
-        if (isset($parsed['title']) && $parsed['title'] !== '') {
+        // Skip empty string or missing values.
+        // The string or integer 0, however, are allowed.  PHP makes
+        // this ugly. The check on string handles XML decompile which
+        // may return an empty array.
+        $emptyValues = ['', []];
+        if (isset($parsed['title']) && !in_array($parsed['title'], $emptyValues, true)) {
             $problem->setTitle($parsed['title']);
         }
 
-        if (isset($parsed['type']) && $parsed['type'] !== '') {
+        if (isset($parsed['type']) && !in_array($parsed['type'], $emptyValues, true)) {
             $problem->setType($parsed['type']);
         }
 
-        if (isset($parsed['status'])) {
-            $status = (int) $parsed['status'];
-            if ($status !== 0) {
-                $problem->setStatus($status);
-            }
+        if (isset($parsed['status']) && ($status = filter_var($parsed['status'], FILTER_VALIDATE_INT)) !== false) {
+            $problem->setStatus($status);
         }
 
-        if (isset($parsed['detail']) && $parsed['detail'] !== '') {
+        if (isset($parsed['detail']) && !in_array($parsed['detail'], $emptyValues, true)) {
             $problem->setDetail($parsed['detail']);
         }
 
-        if (isset($parsed['instance']) && $parsed['instance'] !== '') {
+        if (isset($parsed['instance']) && !in_array($parsed['instance'], $emptyValues, true)) {
             $problem->setInstance($parsed['instance']);
         }
 
