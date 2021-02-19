@@ -315,15 +315,13 @@ class ApiProblemTest extends TestCase
 
     public function testJsonWithFalsyFieldsIsCorrectlyConverted(): void
     {
+        $input = '{"title":"0", "type":"", "detail":"0", "instance":"0", "status":0}';
         $expected = [
             "title"=> "0",
-            "type"=> "0",
+            "type"=> "about:blank",
             "detail"=> "0",
             "instance" => "0",
         ];
-
-        /** @var string $input */
-        $input = json_encode($expected + ['status' => 0]);
 
         self::assertSame($expected, ApiProblem::fromJson($input)->asArray());
     }
@@ -339,7 +337,23 @@ class ApiProblemTest extends TestCase
 
     public function testXmlWithEmptyTypeIsConvertedtoAboutBlank(): void
     {
-        $xml = '<?xml version="1.0"?>'."\n".'<problem><type></type><status>23foobar</status></problem>'."\n";
+        $xml = '<?xml version="1.0"?>'."\n".'<problem><type></type></problem>'."\n";
+        $arr = ["type" => "about:blank"];
+
+        self::assertSame($arr, ApiProblem::fromXml($xml)->asArray());
+    }
+
+    public function testXmlWithInvalidStatusIsSkipped(): void
+    {
+        $xml = '<?xml version="1.0"?>'."\n".'<problem><status>23foobar</status></problem>'."\n";
+        $arr = ["type" => "about:blank"];
+
+        self::assertSame($arr, ApiProblem::fromXml($xml)->asArray());
+    }
+
+    public function testXmlWithFloatStatusIsSkipped(): void
+    {
+        $xml = '<?xml version="1.0"?>'."\n".'<problem><status>2.3</status></problem>'."\n";
         $arr = ["type" => "about:blank"];
 
         self::assertSame($arr, ApiProblem::fromXml($xml)->asArray());
