@@ -135,7 +135,7 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
      */
     public static function fromJson(string $json) : self
     {
-        if (empty($json)) {
+        if (trim($json) === '') {
             throw new JsonParseException('An empty string is not a valid JSON value', JSON_ERROR_SYNTAX, null, $json);
         }
         $parsed = json_decode($json, true);
@@ -215,21 +215,24 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
     {
         $problem = new static();
 
+        if (null !== ($title = self::filterStringValue('title', $parsed))) {
+            $problem->setTitle($title);
+        }
 
-        if (!empty($parsed['title'])) {
-            $problem->setTitle($parsed['title']);
+        if (null !== ($type = self::filterStringValue('type', $parsed))) {
+            $problem->setType($type);
         }
-        if (!empty($parsed['type'])) {
-            $problem->setType($parsed['type']);
+
+        if (null !== ($status = self::filterIntValue('status', $parsed))) {
+            $problem->setStatus($status);
         }
-        if (!empty($parsed['status'])) {
-            $problem->setStatus((int) $parsed['status']);
+
+        if (null !== ($detail = self::filterStringValue('detail', $parsed))) {
+            $problem->setDetail($detail);
         }
-        if (!empty($parsed['detail'])) {
-            $problem->setDetail($parsed['detail']);
-        }
-        if (!empty($parsed['instance'])) {
-            $problem->setInstance($parsed['instance']);
+
+        if (null !== ($instance = self::filterStringValue('instance', $parsed))) {
+            $problem->setInstance($instance);
         }
 
         // Remove the defined keys. That means whatever is left must be a custom
@@ -241,6 +244,60 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
         }
 
         return $problem;
+    }
+
+    /**
+     * Parse the incoming value as non empty string.
+     * The returned value can be used to populate Problem string based properties.
+     *
+     * Skip empty string or missing values. The string 0, however is allowed.
+     * PHP makes this ugly.
+     * The check on string handles XML decompile which may return an empty array.
+     *
+     * @param string|int $key
+     *
+     * @return string|null
+     */
+    protected static function filterStringValue($key, array $arr): ?string
+    {
+        if (!array_key_exists($key, $arr) || !is_string($value = $arr[$key])) {
+            return null;
+        }
+
+        if ($value === '') {
+            return null;
+        }
+
+        return $value;
+    }
+
+    /**
+     * Parse the incoming value as integer
+     * The returned value can be used to populate Problem integer based properties.
+     *
+     * If the value can be parse as an integer it is return as one
+     * otherwise null is returned.
+     *
+     * non integer value will all be discarded float included
+     * @see https://3v4l.org/vZjLD
+     * The check on scalar handles XML decompile which may return an empty array.
+     *
+     * @param int|string $key
+     *
+     * @return int|null
+     */
+    protected static function filterIntValue($key, array $arr): ?int
+    {
+        if (!array_key_exists($key, $arr) || !is_scalar($value = $arr[$key])) {
+            return null;
+        }
+
+        $intValue = intval($value);
+        if (strval($value) !== strval($intValue)) {
+            return null;
+        }
+
+        return $intValue;
     }
 
     /**
