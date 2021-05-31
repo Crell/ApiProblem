@@ -26,9 +26,8 @@ namespace Crell\ApiProblem;
  *
  * @autor Larry Garfield
  */
-class ApiProblem implements \ArrayAccess, \JsonSerializable
+class ApiProblem implements Problem, \ArrayAccess, \JsonSerializable
 {
-
     /**
      * The content type for a JSON based HTTP response carrying
      * problem details.
@@ -319,10 +318,7 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
     }
 
     /**
-     * Retrieves the title of the problem.
-     *
-     * @return string
-     *   The current title.
+     * {@inheritdoc}
      */
     public function getTitle() : string
     {
@@ -330,24 +326,16 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
     }
 
     /**
-     * Sets the title for this problem.
-     *
-     * @param string $title
-     *   The title to set.
-     *  @return ApiProblem
-     *   The invoked object.
+     * {@inheritdoc}
      */
-    public function setTitle(string $title) : self
+    public function setTitle(string $title) : Problem
     {
         $this->title = $title;
         return $this;
     }
 
     /**
-     * Retrieves the problem type of this problem.
-     *
-     * @return string
-     *   The problem type URI of this problem.
+     * {@inheritdoc}
      */
     public function getType() : string
     {
@@ -355,24 +343,16 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
     }
 
     /**
-     * Sets the problem type of this problem.
-     *
-     * @param string $type
-     *   The resolvable problem type URI of this problem.
-     * @return ApiProblem
-     *   The invoked object.
+     * {@inheritdoc}
      */
-    public function setType(string $type) : self
+    public function setType(string $type) : Problem
     {
         $this->type = $type;
         return $this;
     }
 
     /**
-     * Retrieves the detail information of the problem.
-     *
-     * @return string
-     *   The detail of this problem.
+     * {@inheritdoc}
      */
     public function getDetail() : string
     {
@@ -380,24 +360,16 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
     }
 
     /**
-     * Sets the detail for this problem.
-     *
-     * @param string $detail
-     *   The human-readable detail string about this problem.
-     * @return ApiProblem
-     *   The invoked object.
+     * {@inheritdoc}
      */
-    public function setDetail(string $detail) : self
+    public function setDetail(string $detail) : Problem
     {
         $this->detail = $detail;
         return $this;
     }
 
     /**
-     * Returns the problem instance URI of this problem.
-     *
-     * @return string
-     *   The problem instance URI of this problem.
+     * {@inheritdoc}
      */
     public function getInstance() : string
     {
@@ -405,26 +377,16 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
     }
 
     /**
-     * Sets the problem instance URI of this problem.
-     *
-     * @param string $instance
-     *   An absolute URI that uniquely identifies this problem. It MAY link to
-     *   further information about the error, but that is not required.
-     *
-     * @return ApiProblem
-     *   The invoked object.
+     * {@inheritdoc}
      */
-    public function setInstance(string $instance) : self
+    public function setInstance(string $instance) : Problem
     {
         $this->instance = $instance;
         return $this;
     }
 
     /**
-     * Returns the current HTTP status code.
-     *
-     * @return int
-     *   The current HTTP status code. If not set, it will return 0.
+     * {@inheritdoc}
      */
     public function getStatus() : int
     {
@@ -432,17 +394,9 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
     }
 
     /**
-     * Sets the HTTP status code for this problem.
-     *
-     * It is an error for this value to be set to a different value than the
-     * actual HTTP response code.
-     *
-     * @param int $status
-     *   A valid HTTP status code.
-     * @return ApiProblem
-     *   The invoked object.
+     * {@inheritdoc}
      */
-    public function setStatus(int $status) : self
+    public function setStatus(int $status) : Problem
     {
         $this->status = $status;
         return $this;
@@ -482,7 +436,7 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
      * @return string
      *   An XML string representing this problem.
      */
-    public function asXml(bool $pretty = false)
+    public function asXml(bool $pretty = false): string
     {
         $doc = new \SimpleXMLElement('<problem></problem>');
 
@@ -498,13 +452,7 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
     }
 
     /**
-     * Renders this problem as a native PHP array.
-     *
-     * This is mostly useful for debugging, or for placing
-     * this problem response into, say, a Symfony JsonResponse object.
-     *
-     * @return array
-     *   The API problem represented as an array.
+     * {@inheritdoc}
      */
     public function asArray() : array
     {
@@ -560,7 +508,7 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
      * @param mixed $parent
      *   Used for internal recursion only.
      */
-    protected function arrayToXml(array $data, \SimpleXMLElement $element, $parent = null)
+    protected function arrayToXml(array $data, \SimpleXMLElement $element, $parent = null): void
     {
         foreach ($data as $key => $value) {
             if (is_array($value)) {
@@ -591,6 +539,23 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
                 }
             }
         }
+    }
+
+    public function getExtensions(): array
+    {
+        return $this->extensions;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setExtensions(iterable $extensions): Problem
+    {
+        foreach ($extensions as $name => $value) {
+            $this->offsetSet($name, $value);
+        }
+
+        return $this;
     }
 
     /**

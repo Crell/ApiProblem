@@ -358,5 +358,16 @@ class ApiProblemTest extends TestCase
 
         self::assertSame($arr, ApiProblem::fromXml($xml)->asArray());
     }
+
+    public function testItCanAcceptsIterableConstructForExtensions(): void
+    {
+        $data = ['foo' => 'bar', 'status' => 403];
+        $extensions = new \ArrayIterator($data);
+
+        $problem = new ApiProblem();
+        $problem->setExtensions($extensions);
+
+        self::assertSame($data, $problem->getExtensions());
+    }
 }
 
