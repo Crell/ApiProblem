@@ -24,7 +24,7 @@ namespace Crell\ApiProblem;
  *
  * @link http://tools.ietf.org/html/rfc7807
  *
- * @autor Larry Garfield
+ * @author Larry Garfield
  */
 class ApiProblem implements \ArrayAccess, \JsonSerializable
 {
