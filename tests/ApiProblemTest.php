@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Tests for the ApiProblem object.
  *
- * @autor Larry Garfield
+ * @author Larry Garfield
  */
 class ApiProblemTest extends TestCase
 {
