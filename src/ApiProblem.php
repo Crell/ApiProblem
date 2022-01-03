@@ -133,7 +133,7 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
      * @throws JsonParseException
      *   Invalid JSON strings will result in a thrown exception.
      */
-    public static function fromJson(string $json) : self
+    public static function fromJson(string $json): self
     {
         if (trim($json) === '') {
             throw new JsonParseException('An empty string is not a valid JSON value', JSON_ERROR_SYNTAX, null, $json);
@@ -157,7 +157,7 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
      * @return array
      *   A nested array corresponding to the XML element provided.
      */
-    protected static function xmlToArray(\SimpleXMLElement $element) : array
+    protected static function xmlToArray(\SimpleXMLElement $element): array
     {
         $data = (array)$element;
         foreach ($data as $key => $value) {
@@ -177,7 +177,7 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
      * @return ApiProblem
      *   A newly constructed problem object.
      */
-    public static function fromXml(string $string) : self
+    public static function fromXml(string $string): self
     {
         $xml = new \SimpleXMLElement($string);
 
@@ -194,7 +194,7 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
      * @return ApiProblem
      *   A newly constructed problem object.
      */
-    public static function fromArray(array $input) : self
+    public static function fromArray(array $input): self
     {
         $defaultInput = ['title' => null, 'type' => null, 'status' => null, 'detail' => null, 'instance' => null];
 
@@ -324,7 +324,7 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
      * @return string
      *   The current title.
      */
-    public function getTitle() : string
+    public function getTitle(): string
     {
         return $this->title;
     }
@@ -337,7 +337,7 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
      *  @return ApiProblem
      *   The invoked object.
      */
-    public function setTitle(string $title) : self
+    public function setTitle(string $title): self
     {
         $this->title = $title;
         return $this;
@@ -349,7 +349,7 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
      * @return string
      *   The problem type URI of this problem.
      */
-    public function getType() : string
+    public function getType(): string
     {
         return $this->type;
     }
@@ -362,7 +362,7 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
      * @return ApiProblem
      *   The invoked object.
      */
-    public function setType(string $type) : self
+    public function setType(string $type): self
     {
         $this->type = $type;
         return $this;
@@ -374,7 +374,7 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
      * @return string
      *   The detail of this problem.
      */
-    public function getDetail() : string
+    public function getDetail(): string
     {
         return $this->detail;
     }
@@ -387,7 +387,7 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
      * @return ApiProblem
      *   The invoked object.
      */
-    public function setDetail(string $detail) : self
+    public function setDetail(string $detail): self
     {
         $this->detail = $detail;
         return $this;
@@ -399,7 +399,7 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
      * @return string
      *   The problem instance URI of this problem.
      */
-    public function getInstance() : string
+    public function getInstance(): string
     {
         return $this->instance;
     }
@@ -414,7 +414,7 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
      * @return ApiProblem
      *   The invoked object.
      */
-    public function setInstance(string $instance) : self
+    public function setInstance(string $instance): self
     {
         $this->instance = $instance;
         return $this;
@@ -426,7 +426,7 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
      * @return int
      *   The current HTTP status code. If not set, it will return 0.
      */
-    public function getStatus() : int
+    public function getStatus(): int
     {
         return $this->status;
     }
@@ -442,7 +442,7 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
      * @return ApiProblem
      *   The invoked object.
      */
-    public function setStatus(int $status) : self
+    public function setStatus(int $status): self
     {
         $this->status = $status;
         return $this;
@@ -482,7 +482,7 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
      * @return string
      *   An XML string representing this problem.
      */
-    public function asXml(bool $pretty = false)
+    public function asXml(bool $pretty = false): string
     {
         $doc = new \SimpleXMLElement('<problem></problem>');
 
@@ -506,7 +506,7 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
      * @return array
      *   The API problem represented as an array.
      */
-    public function asArray() : array
+    public function asArray(): array
     {
         return $this->compile();
     }
@@ -517,7 +517,7 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
      * @return array
      *   The API problem represented as an array for rendering.
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return $this->compile();
     }
@@ -528,7 +528,7 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
      * @return array
      *   This object, rendered to an array.
      */
-    protected function compile() : array
+    protected function compile(): array
     {
         // Start with any extensions, since that's already an array.
         $response = $this->extensions;
@@ -560,7 +560,7 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
      * @param mixed $parent
      *   Used for internal recursion only.
      */
-    protected function arrayToXml(array $data, \SimpleXMLElement $element, $parent = null)
+    protected function arrayToXml(array $data, \SimpleXMLElement $element, $parent = null): void
     {
         foreach ($data as $key => $value) {
             if (is_array($value)) {
@@ -596,14 +596,17 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
     /**
      * {@inheritdoc}
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return array_key_exists($offset, $this->extensions);
     }
 
     /**
      * {@inheritdoc}
+     *
+     * The proper return type here is `mixed`, which is only available as of 8.0.
      */
+    #[\ReturnTypeWillChange]
     public function &offsetGet($offset)
     {
         return $this->extensions[$offset];
@@ -612,7 +615,7 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
     /**
      * {@inheritdoc}
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         $this->extensions[$offset] = $value;
     }
@@ -620,7 +623,7 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
     /**
      * {@inheritdoc}
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->extensions[$offset]);
     }
