@@ -25,6 +25,8 @@ namespace Crell\ApiProblem;
  * @link http://tools.ietf.org/html/rfc7807
  *
  * @author Larry Garfield
+ *
+ * @implements \ArrayAccess<string, mixed> \JsonSerializable
  */
 class ApiProblem implements \ArrayAccess, \JsonSerializable
 {
@@ -118,7 +120,7 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
     /**
      * Any arbitrary extension properties that have been assigned on this object.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $extensions = [];
 
@@ -154,7 +156,7 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
      *
      * @param \SimpleXMLElement $element
      *   The XML
-     * @return array
+     * @return array<mixed>
      *   A nested array corresponding to the XML element provided.
      */
     protected static function xmlToArray(\SimpleXMLElement $element): array
@@ -189,7 +191,7 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
     /**
      * Parses an array into a Problem object.
      *
-     * @param array $input
+     * @param array<mixed> $input
      *   The array to parse.
      * @return ApiProblem
      *   A newly constructed problem object.
@@ -206,7 +208,7 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
     /**
      * Decompiles an array into an ApiProblem object.
      *
-     * @param array $parsed
+     * @param array<mixed> $parsed
      *   An array parsed from JSON or XML to turn into an ApiProblem object.
      * @return ApiProblem
      *   A new ApiProblem object.
@@ -258,6 +260,7 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
      * The check on string handles XML decompile which may return an empty array.
      *
      * @param string|int $key
+     * @param array<int|string, mixed> $arr
      *
      * @return string|null
      */
@@ -286,6 +289,7 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
      * The check on scalar handles XML decompile which may return an empty array.
      *
      * @param int|string $key
+     * @param array<int|string, mixed> $arr
      *
      * @return int|null
      */
@@ -506,7 +510,7 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
      * This is mostly useful for debugging, or for placing
      * this problem response into, say, a Symfony JsonResponse object.
      *
-     * @return array
+     * @return array<mixed>
      *   The API problem represented as an array.
      */
     public function asArray(): array
@@ -517,7 +521,7 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
     /**
      * Supports rendering this problem as a JSON using the json_encode() function.
      *
-     * @return array
+     * @return array<mixed>
      *   The API problem represented as an array for rendering.
      */
     public function jsonSerialize(): array
@@ -528,7 +532,7 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
     /**
      * Compiles the object down to an array format, suitable for serializing.
      *
-     * @return array
+     * @return array<mixed>
      *   This object, rendered to an array.
      */
     protected function compile(): array
@@ -556,7 +560,7 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
      *
      * @link https://github.com/blongden/hal
      *
-     * @param array $data
+     * @param array<mixed> $data
      *   The data to add to the element.
      * @param \SimpleXMLElement $element
      *   The XML object to which to add data.
@@ -598,6 +602,7 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
 
     /**
      * {@inheritdoc}
+     * @param string $offset
      */
     public function offsetExists($offset): bool
     {
@@ -606,6 +611,9 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
 
     /**
      * {@inheritdoc}
+     *
+     * @param string $offset
+     * @return mixed
      *
      * The proper return type here is `mixed`, which is only available as of 8.0.
      */
@@ -617,6 +625,9 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
 
     /**
      * {@inheritdoc}
+     *
+     * @param string $offset
+     * @param mixed $value
      */
     public function offsetSet($offset, $value): void
     {
@@ -625,6 +636,8 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
 
     /**
      * {@inheritdoc}
+     *
+     * @param string $offset
      */
     public function offsetUnset($offset): void
     {

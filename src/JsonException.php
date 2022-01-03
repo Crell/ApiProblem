@@ -56,6 +56,9 @@ class JsonException extends \InvalidArgumentException
         return new self(static::getExceptionMessage($jsonError), $jsonError, null, $failedValue);
     }
 
+    /**
+     * @param mixed $failedValue
+     */
     public function __construct(string $message = '', int $code = 0, \Throwable $previous = null, $failedValue = null)
     {
         parent::__construct($message, $code, $previous);

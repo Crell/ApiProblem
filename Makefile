@@ -15,3 +15,5 @@ composer: build
 test: build
 	$(compose_command) vendor/bin/phpunit
 
+phpstan: build
+	$(compose_command) vendor/bin/phpstan
