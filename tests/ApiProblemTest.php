@@ -14,14 +14,14 @@ use PHPUnit\Framework\TestCase;
 class ApiProblemTest extends TestCase
 {
 
-    public function testConstructor() : void
+    public function testConstructor(): void
     {
         $problem = new ApiProblem('Title', 'URI');
         self::assertEquals("Title", $problem->getTitle());
         self::assertEquals("URI", $problem->getType());
     }
 
-    public function testConstructorWithDefaults() : void
+    public function testConstructorWithDefaults(): void
     {
         $problem = new ApiProblem();
         self::assertSame('', $problem->getTitle());
@@ -31,7 +31,7 @@ class ApiProblemTest extends TestCase
         self::assertSame('', $problem->getTitle());
     }
 
-    public function testSimpleExtraProperty() : void
+    public function testSimpleExtraProperty(): void
     {
         $problem = new ApiProblem('Title', 'URI');
 
@@ -43,7 +43,7 @@ class ApiProblemTest extends TestCase
         self::assertNull($problem['sir']);
     }
 
-    public function testComplexExtraProperty() : void
+    public function testComplexExtraProperty(): void
     {
         $problem = new ApiProblem('Title', 'URI');
 
@@ -52,7 +52,7 @@ class ApiProblemTest extends TestCase
         self::assertEquals('Zim', $problem['irken']['invader']);
     }
 
-    public function testSimpleJsonCompileWithJsonException() : void
+    public function testSimpleJsonCompileWithJsonException(): void
     {
         self::expectException(JsonEncodeException::class);
         self::expectExceptionCode(\JSON_ERROR_UTF8);
@@ -67,7 +67,7 @@ class ApiProblemTest extends TestCase
         $result = json_decode($json, true);
     }
 
-    public function testSimpleJsonCompile() : void
+    public function testSimpleJsonCompile(): void
     {
         $problem = new ApiProblem('Title', 'URI');
 
@@ -83,7 +83,7 @@ class ApiProblemTest extends TestCase
         self::assertArrayNotHasKey('detail', $result);
     }
 
-    public function testExtraPropertyJsonCompile() : void
+    public function testExtraPropertyJsonCompile(): void
     {
         $problem = new ApiProblem('Title', 'URI');
         $problem['sir'] = 'Gir';
@@ -99,7 +99,7 @@ class ApiProblemTest extends TestCase
         self::assertEquals('Zim', $result['irken']['invader']);
     }
 
-    public function testSimpleJsonEncode() : void
+    public function testSimpleJsonEncode(): void
     {
         $problem = new ApiProblem('Title', 'URI');
 
@@ -120,7 +120,7 @@ class ApiProblemTest extends TestCase
      *
      * @doesNotPerformAssertions
      */
-    public function testNoTitleAllowed() : void
+    public function testNoTitleAllowed(): void
     {
         // This should result in no error.
         $problem = new ApiProblem();
@@ -130,7 +130,7 @@ class ApiProblemTest extends TestCase
     /**
      * Confirms that the type property defaults to "about:blank"
      */
-    public function testTypeDefault() : void
+    public function testTypeDefault(): void
     {
         $problem = new ApiProblem('Title');
         $json = $problem->asJson();
@@ -138,7 +138,7 @@ class ApiProblemTest extends TestCase
         self::assertEquals('about:blank', $result['type']);
     }
 
-    public function testSimpleXmlCompile() : void
+    public function testSimpleXmlCompile(): void
     {
         $problem = new ApiProblem('Title', 'URI');
 
@@ -153,7 +153,7 @@ class ApiProblemTest extends TestCase
         self::assertEquals('Title', $titles->item(0)->textContent);
     }
 
-    public function testExtraPropertyXmlCompile() : void
+    public function testExtraPropertyXmlCompile(): void
     {
         $problem = new ApiProblem('Title', 'URI');
         $problem['sir'] = 'Gir';
@@ -180,7 +180,7 @@ class ApiProblemTest extends TestCase
         }
     }
 
-    public function testParseJsonWithEmptyString() : void
+    public function testParseJsonWithEmptyString(): void
     {
         self::expectException(JsonParseException::class);
         self::expectExceptionCode(\JSON_ERROR_SYNTAX);
@@ -189,7 +189,7 @@ class ApiProblemTest extends TestCase
         ApiProblem::fromJson('');
     }
 
-    public function testParseJsonWithInvalidString() : void
+    public function testParseJsonWithInvalidString(): void
     {
         self::expectException(JsonParseException::class);
         self::expectExceptionCode(\JSON_ERROR_SYNTAX);
@@ -198,7 +198,7 @@ class ApiProblemTest extends TestCase
         ApiProblem::fromJson(\hex2bin('58efa99d4e19ff4e93efd93f7afb10a5'));
     }
 
-    public function testParseJson() : void
+    public function testParseJson(): void
     {
         $problem = new ApiProblem('Title', 'URI');
         $problem->setStatus(403);
@@ -217,7 +217,7 @@ class ApiProblemTest extends TestCase
         self::assertEquals('Zim', $result['irken']['invader']);
     }
 
-    public function testParseXml() : void
+    public function testParseXml(): void
     {
         $problem = new ApiProblem('Title', 'URI');
         $problem->setStatus(403);
@@ -232,7 +232,7 @@ class ApiProblemTest extends TestCase
         self::assertEquals('Zim', $result['irken']['invader']);
     }
 
-    public function testArray() : void
+    public function testArray(): void
     {
         $problem = new ApiProblem('Title', 'URI');
         $problem->setStatus(403);
@@ -247,7 +247,7 @@ class ApiProblemTest extends TestCase
         self::assertEquals('Zim', $array['irken']['invader']);
     }
 
-    public function testPrettyPrintJson() : void
+    public function testPrettyPrintJson(): void
     {
         $problem = new ApiProblem('Title', 'URI');
         $problem->setStatus(403);
@@ -258,7 +258,7 @@ class ApiProblemTest extends TestCase
         self::assertTrue(strpos($json, '  ') !== FALSE);
     }
 
-    public function testParseFromArrayWithEmptyArray() : void
+    public function testParseFromArrayWithEmptyArray(): void
     {
         $problem = new ApiProblem();
         $problemFromArray = ApiProblem::fromArray([]);
@@ -266,7 +266,7 @@ class ApiProblemTest extends TestCase
         self::assertEquals($problem, $problemFromArray);
     }
 
-    public function testParseFromArray() : void
+    public function testParseFromArray(): void
     {
         $problem = new ApiProblem('Title', 'URI');
         $problem->setStatus(403);
