@@ -3,3 +3,4 @@ vendor
 composer.lock
 coverage
 .phpunit.result.cache
+.env
