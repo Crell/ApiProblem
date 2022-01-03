@@ -213,6 +213,9 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
      */
     protected static function decompile(array $parsed) : self
     {
+        // This line is fine as long as the constructor has only optional arguments. That is a requirement
+        // that cannot be enforced in code, but is effectively a requirement of the class.
+        // @phpstan-ignore-next-line
         $problem = new static();
 
         if (null !== ($title = self::filterStringValue('title', $parsed))) {
