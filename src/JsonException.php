@@ -53,7 +53,9 @@ class JsonException extends \InvalidArgumentException
      */
     public static function fromJsonError(int $jsonError, $failedValue): self
     {
-        return new self(static::getExceptionMessage($jsonError), $jsonError, null, $failedValue);
+        // This is a valid use of `new static`, even if PHPStan is wrong about it.
+        // @phpstan-ignore-next-line
+        return new static(static::getExceptionMessage($jsonError), $jsonError, null, $failedValue);
     }
 
     /**
