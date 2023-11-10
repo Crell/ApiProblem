@@ -85,6 +85,15 @@ Install ApiProblem like any other Composer package:
 
 See the [Composer documentation][2] for more details.
 
+## Security
+
+If you discover any security related issues, please use the [GitHub security reporting form](https://github.com/Crell/ApiProblem/security) rather than the issue queue.
+
+## Credits
+
+- [Larry Garfield][link-author]
+- [All Contributors][link-contributors]
+
 ## License
 
 This library is released under the MIT license.  In short, "leave the copyright statement intact, otherwise have fun."  See LICENSE for more information.
