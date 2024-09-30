@@ -12,17 +12,12 @@ use Psr\Http\Message\ResponseInterface;
  */
 class HttpConverter
 {
-    /**
-     * @var ResponseFactoryInterface
-     */
-    protected $responseFactory;
+    protected ResponseFactoryInterface $responseFactory;
 
     /**
      * Whether or not the response body should be "pretty-printed".
-     *
-     * @var bool
      */
-    protected $pretty;
+    protected bool $pretty;
 
     /**
      * HttpConverter constructor.

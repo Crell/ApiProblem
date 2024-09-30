@@ -52,10 +52,8 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
      *
      *  It SHOULD NOT change from occurrence to occurrence of the problem,
      *  except for purposes of localization.
-     *
-     * @var string
      */
-    protected $title;
+    protected string $title;
 
     /**
      * A URI reference (RFC3986) that identifies the problem type.
@@ -72,10 +70,8 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
      * resolved relative to the document's base URI, as per RFC3986, Section 5.
      *
      * @link http://tools.ietf.org/html/rfc3986
-     *
-     * @var string
      */
-    protected $type;
+    protected string $type;
 
     /**
      * The HTTP status code set by the origin server for this occurrence of the problem.
@@ -85,10 +81,8 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
      * use the same status code in the actual HTTP response, to assure that
      * generic HTTP software that does not understand this format still behaves
      * correctly.
-     *
-     * @var int
      */
-    protected $status = 0;
+    protected int $status = 0;
 
     /**
      * An human readable explanation specific to this occurrence of the problem.
@@ -98,10 +92,8 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
      *
      * Consumers SHOULD NOT parse the "detail" member for information; extensions
      * are more suitable and less error-prone ways to obtain such information.
-     *
-     * @var string
      */
-    protected $detail = '';
+    protected string $detail = '';
 
     /**
      * A URI reference that identifies the specific occurrence of the problem.
@@ -112,17 +104,15 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
      * resolved relative to the document's base URI, as per RFC3986, Section 5.
      *
      * @link http://tools.ietf.org/html/rfc3986
-     *
-     * @var string
      */
-    protected $instance = '';
+    protected string $instance = '';
 
     /**
      * Any arbitrary extension properties that have been assigned on this object.
      *
      * @var array<string, string>
      */
-    protected $extensions = [];
+    protected array $extensions = [];
 
     /**
      * Parses a JSON string into a Problem object.
