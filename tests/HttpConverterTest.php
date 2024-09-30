@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Crell\ApiProblem;
 
+use Nyholm\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
-use Laminas\Diactoros\Response;
 
 class HttpConverterTest extends TestCase
 {
@@ -18,7 +18,7 @@ class HttpConverterTest extends TestCase
         {
             public function createResponse(int $code = 200, string $reasonPhrase = ''): ResponseInterface
             {
-                return new Response('php://memory', $code);
+                return new Response($code);
             }
         };
     }
