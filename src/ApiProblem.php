@@ -7,7 +7,7 @@ namespace Crell\ApiProblem;
 /**
  * An API error of some form.
  *
- * This object generates errors in compliance with RFC 7807 "API Problem".
+ * This object generates errors in compliance with RFC 9457 "API Problem".
  *
  * This object should be configured via the appropriate methods, and then
  * rendered using the asJson() or asXml() methods. The resulting string is
@@ -22,7 +22,7 @@ namespace Crell\ApiProblem;
  * to get/set those values. For extended values, use the ArrayAccess interface
  * to specify arbitrary additional properties.
  *
- * @link http://tools.ietf.org/html/rfc7807
+ * @link http://tools.ietf.org/html/rfc9457
  *
  * @author Larry Garfield
  *

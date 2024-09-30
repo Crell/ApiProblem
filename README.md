@@ -2,9 +2,9 @@
 
 [![Build Status](https://travis-ci.org/Crell/ApiProblem.svg?branch=master)](https://travis-ci.org/Crell/ApiProblem)
 
-This library provides a simple and straightforward implementation of the IETF Problem Details for HTTP APIs, [RFC 7807][1].
+This library provides a simple and straightforward implementation of the IETF Problem Details for HTTP APIs, [RFC 9457][1].
 
-[RFC 7807][1] is a simple specification for formatting error responses from RESTful APIs on the web.  This library provides a simple and convenient way to interact with that specification.  It supports generating and parsing [RFC 7807][1] messages, in both JSON and XML variants.
+[RFC 9457][1] is a simple specification for formatting error responses from RESTful APIs on the web.  This library provides a simple and convenient way to interact with that specification.  It supports generating and parsing [RFC 9457][1] messages, in both JSON and XML variants.
 
 ## Generating responses
 
@@ -102,7 +102,7 @@ This library is released under the MIT license.  In short, "leave the copyright 
 
 Pull requests accepted!  The goal is complete conformance with the IETF spec.
 
-[1]: https://tools.ietf.org/html/rfc7807
+[1]: https://tools.ietf.org/html/rfc9457
 [2]: http://getcomposer.org/
 [3]: https://www.php-fig.org/psr/psr-7/
 [4]: https://www.php-fig.org/psr/psr-17/
