@@ -40,7 +40,12 @@
         }
     },
     "scripts": {
-        "test": "php vendor/bin/phpunit",
-        "test-coverage": "php vendor/bin/phpunit --coverage-html coverage"
+        "test": "XDEBUG_MODE=develop,debug phpunit",
+        "phpstan": "php -d memory_limit=256M vendor/bin/phpstan",
+        "coverage": "XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-text",
+        "all-checks": [
+            "@test",
+            "@phpstan"
+        ]
     }
 }
