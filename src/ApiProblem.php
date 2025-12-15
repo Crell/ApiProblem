@@ -331,7 +331,7 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
      *
      * @param string $title
      *   The title to set.
-     *  @return ApiProblem
+     *  @return $this
      *   The invoked object.
      */
     public function setTitle(string $title): self
@@ -356,7 +356,7 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
      *
      * @param string $type
      *   The resolvable problem type URI of this problem.
-     * @return ApiProblem
+     * @return $this
      *   The invoked object.
      */
     public function setType(string $type): self
@@ -381,7 +381,7 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
      *
      * @param string $detail
      *   The human-readable detail string about this problem.
-     * @return ApiProblem
+     * @return $this
      *   The invoked object.
      */
     public function setDetail(string $detail): self
@@ -408,7 +408,7 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
      *   An absolute URI that uniquely identifies this problem. It MAY link to
      *   further information about the error, but that is not required.
      *
-     * @return ApiProblem
+     * @return $this
      *   The invoked object.
      */
     public function setInstance(string $instance): self
@@ -436,7 +436,7 @@ class ApiProblem implements \ArrayAccess, \JsonSerializable
      *
      * @param int $status
      *   A valid HTTP status code.
-     * @return ApiProblem
+     * @return $this
      *   The invoked object.
      */
     public function setStatus(int $status): self
