@@ -1,18 +1,23 @@
-# To use:
-# Run "docker-compose build" to rebuild the app container.
-# Run "docker-compose run -u $(id -u ${USER}):$(id -g ${USER}) --rm php81 composer install" to install dependencies.
-# Run "docker-compose run  -u $(id -u ${USER}):$(id -g ${USER})--rm php81 vendor/bin/phpunit" to run the test script on 8.1.
-# Run "docker-compose down -v" to fully wipe everything and start over.
-# Run "docker-compose run -u $(id -u ${USER}):$(id -g ${USER}) --rm php80 bash" to log into the container to run tests selectively.
+###############################################################################
+#                          Generated on phpdocker.io                          #
+###############################################################################
 
 services:
-    php81:
-        build: ./docker/php/81
-        volumes:
-            - ~/.composer:/.composer #uncomment this line to allow usage of local composer cache
-            - .:/usr/src/myapp
-            - ./docker/php/81/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
-            - ./docker/php/conf.d/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
+#    webserver:
+#        image: 'nginx:alpine'
+#        working_dir: /app
+#        volumes:
+#            - '.:/app'
+#            - './phpdocker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf'
+#        ports:
+#            - '30000:80'
+
+    php-fpm:
+        build: phpdocker/php-fpm
+        working_dir: /app
         environment:
-            XDEBUG_MODE: "develop,debug"
-            XDEBUG_CONFIG: "client_host=${HOST_IP} idekey=${IDE_KEY} client_port=${XDEBUG_PORT} discover_client_host=1 start_with_request=1"
+            PHP_IDE_CONFIG: "serverName=Docker"
+        volumes:
+            - '.:/app'
+            - './phpdocker/php-fpm/php-ini-overrides.ini:/etc/php/8.4/fpm/conf.d/99-overrides.ini'
+            - './phpdocker/php-fpm/php-ini-overrides.ini:/etc/php/8.4/cli/conf.d/99-overrides.ini'

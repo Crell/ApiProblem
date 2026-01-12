@@ -1,5 +1,7 @@
 parameters:
-	level: 6
-	paths:
-		- src
-		- tests
+    level: 6
+    tmpDir: build/phpstan
+    resultCachePath: %currentWorkingDirectory%/build/phpstan/resultCache.php
+    paths:
+        - src
+        - tests
