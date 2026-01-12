@@ -8,5 +8,6 @@ docker-compose.yml export-ignore
 phpstan.neon.dist export-ignore
 phpunit.xml.dist export-ignore
 .github/ export-ignore
-docker/ export-ignore
+phpdocker/ export-ignore
 tests/ export-ignore
+Taskfile export-ignore
