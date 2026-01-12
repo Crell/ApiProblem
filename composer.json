@@ -28,11 +28,11 @@
         "psr/http-factory": "Common interfaces for PSR-7 HTTP message factories"
     },
     "require-dev": {
-        "nyholm/psr7": "^1.8",
-        "phpunit/phpunit": "^7.0 || ^8.0 || ^9.0",
-        "psr/http-factory": "^1.0",
-        "psr/http-message": "1.*",
-        "phpstan/phpstan": "^2.1"
+        "nyholm/psr7": "^1.8.2",
+        "phpunit/phpunit": "^7.0 || ^8.0 || ^9.6.31",
+        "psr/http-factory": "^1.1",
+        "psr/http-message": "^1.1",
+        "phpstan/phpstan": "^2.1.33"
     },
     "extra": {
         "branch-alias": {
