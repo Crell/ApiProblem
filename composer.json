@@ -21,7 +21,7 @@
         }
     },
     "require": {
-        "php": "^7.4 || ^8.0"
+        "php": "^8.3"
     },
     "suggest": {
         "psr/http-message": "Common interface for HTTP messages",
