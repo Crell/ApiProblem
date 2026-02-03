@@ -22,6 +22,7 @@ class JsonException extends \InvalidArgumentException
         \JSON_ERROR_UNSUPPORTED_TYPE => 'A value of a type that cannot be encoded was given',
         \JSON_ERROR_INVALID_PROPERTY_NAME => 'A property name that cannot be encoded was given',
         \JSON_ERROR_UTF16 => 'Malformed UTF-16 characters, possibly incorrectly encoded',
+        \JSON_ERROR_NON_BACKED_ENUM => 'Value contains a non-backed enum which cannot be serialized.',
     ];
 
     /**
